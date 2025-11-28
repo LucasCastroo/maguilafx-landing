@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  /* Valor padrão transparente */
+  --section-bg-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+}
+
+html,
+body {
+  @apply bg-black text-white font-sans antialiased;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* Container padrão */
+.page-container {
+  @apply mx-auto w-full max-w-6xl px-4 md:px-6;
+}
+
+/* Background padrão */
+.section-bg {
+  position: relative;
+  color: #fff;
+  background-image: var(--section-bg-image);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100%;
+}
+
+/* Camada de escurecimento e glow */
+.section-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.14), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(255, 42, 42, 0.45), transparent 55%),
+    rgba(5, 5, 9, 0.85);
+  mix-blend-mode: screen;
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+
+/* Conteúdo acima do overlay */
+.section-inner {
+  position: relative;
+  z-index: 2;
+}
+
+/* Botões padrão */
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-full bg-maguilaRed px-7 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-white shadow-glow-red transition hover:translate-y-0.5 hover:bg-red-500 hover:shadow-lg;
+}
+
+.btn-outline {
+  @apply inline-flex items-center justify-center rounded-full border border-white/40 bg-white/5 px-7 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-white/90 transition hover:bg-white/10;
+}
+
+/* Efeito de hover Fogo para Cards */
+.hover-fire-card {
+  @apply transition-all duration-500 border border-white/5;
+}
+
+.hover-fire-card:hover {
+  @apply border-orange-500/50 -translate-y-2 bg-black/80;
+  box-shadow:
+    0 20px 40px -10px rgba(255, 69, 0, 0.5),
+    0 0 20px rgba(220, 38, 38, 0.4),
+    inset 0 0 20px rgba(255, 69, 0, 0.1);
+}
+
+/* Símbolo de fogo gigante à direita (Apenas Desktop) - Reutilizável */
+@media (min-width: 1024px) {
+  .section-with-fire::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -100px;
+    width: 1500px;
+    background-image: url("/images/simbolo-fire.png");
+    background-repeat: no-repeat;
+    background-position: center right;
+    background-size: contain;
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
