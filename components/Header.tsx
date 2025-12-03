@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 const navItems = [
   { label: "Início", href: "#inicio" },
   { label: "Sobre", href: "#sobre" },
-  { label: "Eventos", href: "#eventos" },
+  { label: "Equipamentos", href: "#equipamentos" },
   { label: "Portfólio", href: "#portfolio" },
   { label: "Contato", href: "#contato" },
 ];
@@ -42,6 +42,7 @@ export function Header() {
               fill
               className="object-contain"
               priority
+              sizes="36px"
             />
           </div>
           <span className="text-sm font-semibold tracking-[0.3em] uppercase text-white/80">

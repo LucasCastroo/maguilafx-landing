@@ -177,6 +177,7 @@ export default function HomePage() {
                   alt="Time MaguilaFX posicionado"
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
               <p className="text-xs text-white/65">
@@ -188,9 +189,9 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* TIPOS DE EVENTOS */}
+      {/* EQUIPAMENTOS */}
       <section
-        id="eventos"
+        id="equipamentos"
         className="section-bg"
         style={{
           ["--section-bg-image" as any]: "url('/images/img-1.png')",
@@ -206,77 +207,76 @@ export default function HomePage() {
           <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
             <div>
               <h2 className="text-3xl font-bold md:text-4xl">
-                Efeitos especiais para{" "}
-                <span className="text-maguilaRed">todo tipo de evento</span>.
+                Nossos <span className="text-maguilaRed">Equipamentos</span>
               </h2>
               <p className="mt-3 max-w-xl text-sm md:text-base text-white/80">
-                Cada produção pede uma atmosfera diferente. Adaptamos nossos
-                equipamentos e o desenho dos efeitos ao formato do seu evento.
+                Utilizamos tecnologia de ponta para garantir segurança e o máximo impacto visual.
+                Conheça as máquinas que fazem a mágica acontecer.
               </p>
             </div>
             <div className="text-xs text-white/70">
               <p className="font-semibold text-white">
-                Planejamento + operação completa
+                Equipamentos próprios e revisados
               </p>
-              <p>Do primeiro briefing ao último efeito do show.</p>
+              <p>Segurança e performance garantidas.</p>
             </div>
           </div>
 
           <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {/* Casamentos */}
+            {/* Flame Machines */}
             <div className="hover-fire-card rounded-3xl bg-black/60 p-4 backdrop-blur">
               <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
                 <Image
-                  src="/images/img-casamento.png"
-                  alt="Efeitos especiais para casamentos"
+                  src="/images/img-fire-machine.png"
+                  alt="Máquina de Fogo"
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
               </div>
               <h3 className="mt-4 text-lg font-semibold">
-                Casamentos & momentos únicos
+                Flame Machines
               </h3>
               <p className="mt-2 text-sm text-white/80">
-                Entrada dos noivos, primeira dança, corte do bolo e momentos
-                chave com faíscas frias e efeitos controlados.
+                Jatos de fogo reais controlados via DMX. Altura e duração ajustáveis para momentos de clímax.
               </p>
             </div>
 
-            {/* Shows e festivais */}
+            {/* Sparkulars */}
             <div className="hover-fire-card rounded-3xl bg-black/60 p-4 backdrop-blur">
               <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
                 <Image
-                  src="/images/img-fire-machine.jpg"
-                  alt="Efeitos de fogo em shows"
+                  src="/images/sparkular-machine.jpg"
+                  alt="Sparkular - Faísca Fria"
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
               </div>
               <h3 className="mt-4 text-lg font-semibold">
-                Shows & festivais
+                Sparkulars (Faísca Fria)
               </h3>
               <p className="mt-2 text-sm text-white/80">
-                Pirotecnia, CO₂, chamas e efeitos sincronizados com o set
-                musical para criar picos de energia no palco.
+                Efeito de pirotecnia indoor totalmente seguro. Não queima, não gera fumaça e é perfeito para proximidade.
               </p>
             </div>
 
-            {/* Grandes estruturas */}
+            {/* CO2 Jets */}
             <div className="hover-fire-card rounded-3xl bg-black/60 p-4 backdrop-blur">
               <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
                 <Image
-                  src="/images/img-1.jpg"
-                  alt="Grandes estruturas com efeitos especiais"
+                  src="/images/jato-co2.jpg"
+                  alt="Jatos de CO2"
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
               </div>
               <h3 className="mt-4 text-lg font-semibold">
-                Grandes estruturas & turnês
+                Jatos de CO₂ & Fumaça
               </h3>
               <p className="mt-2 text-sm text-white/80">
-                Palcos de grande porte, festivais e turnês completas, com
-                repetibilidade e padrão de execução em cada data.
+                Colunas de fumaça criogênica de desaparecimento rápido (CO₂) e máquinas de fumaça de alta densidade.
               </p>
             </div>
           </div>
@@ -317,13 +317,13 @@ export default function HomePage() {
           <div className="mt-8 grid gap-5 md:grid-cols-2">
             <div className="space-y-5">
               <PortfolioCard
-                src="/images/img-1.jpg"
+                src="/images/img-1.png"
                 alt="Show com painéis de LED e efeitos de fumaça"
                 titulo="Festival ao vivo"
                 descricao="Efeitos de fumaça e luz integrados ao conteúdo de LED para criar camadas de profundidade no palco."
               />
               <PortfolioCard
-                src="/images/img-fire-machine.jpg"
+                src="/images/set-dj.jpg"
                 alt="DJ com máquinas de fogo no palco"
                 titulo="Set de DJ com chamas"
                 descricao="Máquinas de fogo trabalhando em sincronismo com os drops para criar momentos explosivos."
@@ -506,7 +506,6 @@ export default function HomePage() {
       </section>
 
       {/* RODAPÉ */}
-      {/* RODAPÉ */}
       <footer className="border-t border-white/10 bg-black py-12 text-sm text-white/70">
         <div className="page-container">
           <div className="grid gap-10 md:grid-cols-4">
@@ -549,10 +548,10 @@ export default function HomePage() {
                 </li>
                 <li>
                   <a
-                    href="#eventos"
+                    href="#equipamentos"
                     className="transition-colors hover:text-maguilaRed"
                   >
-                    Eventos
+                    Equipamentos
                   </a>
                 </li>
                 <li>
@@ -646,7 +645,7 @@ function PortfolioCard({ src, alt, titulo, descricao }: PortfolioCardProps) {
   return (
     <article className="hover-fire-card rounded-3xl bg-black/70 p-4 backdrop-blur">
       <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
-        <Image src={src} alt={alt} fill className="object-cover" />
+        <Image src={src} alt={alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
       </div>
       <h3 className="mt-3 text-base font-semibold md:text-lg">{titulo}</h3>
       <p className="mt-1 text-sm text-white/80">{descricao}</p>

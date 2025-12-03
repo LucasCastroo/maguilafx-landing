@@ -1,4 +1,3 @@
-// app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/Header";
@@ -19,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <body>
         <Header />
         {children}
