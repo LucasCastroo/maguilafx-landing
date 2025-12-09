@@ -580,7 +580,7 @@ export default function HomePage() {
               <div className="flex gap-4">
                 {/* WhatsApp Icon */}
                 <a
-                  href="https://wa.me/5500000000000"
+                  href="https://wa.me/556392252302"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white/70 transition-colors hover:text-[#25D366]"
