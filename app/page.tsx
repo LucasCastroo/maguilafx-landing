@@ -1,4 +1,3 @@
-// app/page.tsx
 "use client";
 
 import Image from "next/image";
@@ -70,7 +69,7 @@ export default function HomePage() {
             <div className="mt-8 flex items-center justify-center gap-6">
               {/* WhatsApp */}
               <a
-                href="https://wa.me/5500000000000"
+                href="https://wa.me/556392252302"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white/70 transition-all duration-300 hover:-translate-y-1 hover:border-[#25D366] hover:bg-[#25D366]/10 hover:text-[#25D366] hover:shadow-[0_0_20px_rgba(37,211,102,0.4)]"
