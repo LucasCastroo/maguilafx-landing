@@ -112,81 +112,6 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* SOBRE A MAGUILAFX */}
-      <section
-        id="sobre"
-        className="section-bg"
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
-          transition={{ duration: 0.8 }}
-          className="section-inner page-container py-20 md:py-24"
-        >
-          <div className="grid gap-10 md:grid-cols-[1.1fr_minmax(0,1fr)] md:items-center">
-            <div className="space-y-5">
-              <h2 className="text-3xl font-bold md:text-4xl">
-                Quem é a <span className="text-maguilaRed">MaguilaFX</span>?
-              </h2>
-              <p className="text-sm md:text-base text-white/80">
-                Somos um time dedicado a transformar palco em experiência
-                imersiva. Do planejamento à execução, cuidamos de cada detalhe
-                para que o seu público sinta o impacto de um grande espetáculo –
-                com segurança, técnica e criatividade.
-              </p>
-              <p className="text-sm md:text-base text-white/80">
-                Atuamos em shows, festivais, casamentos, formaturas, eventos
-                corporativos e qualquer produção que precise de{" "}
-                <strong>efeitos especiais profissionais</strong> para marcar a
-                memória de quem vive a experiência.
-              </p>
-
-              <div className="grid gap-4 text-sm text-white/85 md:grid-cols-2">
-                <div className="rounded-2xl bg-black/40 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-maguilaGold">
-                    Especialidades
-                  </p>
-                  <ul className="mt-2 space-y-1">
-                    <li>• Chamas e pirotecnia de palco</li>
-                    <li>• Faísca fria para cerimônias</li>
-                    <li>• Jatos de CO₂ e fumaça</li>
-                    <li>• Papel picado, fogos e efeitos de impacto</li>
-                  </ul>
-                </div>
-
-                <div className="rounded-2xl bg-black/40 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-maguilaGold">
-                    Diferenciais
-                  </p>
-                  <ul className="mt-2 space-y-1">
-                    <li>• Equipe treinada e alinhada ao rider técnico</li>
-                    <li>• Equipamentos profissionais e revisados</li>
-                    <li>• Planejamento integrado com produção</li>
-                    <li>• Foco em segurança e impacto visual</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-white/10 bg-black/50">
-                <Image
-                  src="/images/foto-equipe1.jpeg"
-                  alt="Time MaguilaFX posicionado"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-              <p className="text-xs text-white/65">
-                Um time completo, preparado para operar grandes estruturas de
-                palco e eventos de alta exigência técnica.
-              </p>
-            </div>
-          </div>
-        </motion.div>
-      </section>
 
       {/* EQUIPAMENTOS */}
       <section
@@ -347,161 +272,233 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* CONTATO */}
-      <section
-        id="contato"
-        className="section-bg section-with-fire"
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
-          transition={{ duration: 0.8 }}
-          className="section-inner page-container py-20 md:py-24"
-        >
-          <div className="grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-center">
-            <div className="space-y-5">
-              <h2 className="text-3xl font-bold md:text-4xl">
-                Vamos colocar <span className="text-maguilaRed">fogo</span> no
-                seu próximo evento?
-              </h2>
-              <p className="max-w-xl text-sm md:text-base text-white/80">
-                Conte um pouco sobre o que você está planejando. Nosso time vai
-                analisar o evento e responder com uma proposta de efeitos
-                especiais sob medida.
-              </p>
+      {/* SOBRE A MAGUILAFX */}
+      <section className="section-bg section-with-fire">
+        <div id="sobre">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.3 }}
+            transition={{ duration: 0.8 }}
+            className="section-inner page-container pt-20 pb-10 md:pt-24 md:pb-12"
+          >
+            <div className="grid gap-10 md:grid-cols-[1.1fr_minmax(0,1fr)] md:items-center">
+              <div className="space-y-5">
+                <h2 className="text-3xl font-bold md:text-4xl">
+                  Quem é a <span className="text-maguilaRed">MaguilaFX</span>?
+                </h2>
+                <p className="text-sm md:text-base text-white/80">
+                  Somos um time dedicado a transformar palco em experiência
+                  imersiva. Do planejamento à execução, cuidamos de cada detalhe
+                  para que o seu público sinta o impacto de um grande espetáculo –
+                  com segurança, técnica e criatividade.
+                </p>
+                <p className="text-sm md:text-base text-white/80">
+                  Atuamos em shows, festivais, casamentos, formaturas, eventos
+                  corporativos e qualquer produção que precise de{" "}
+                  <strong>efeitos especiais profissionais</strong> para marcar a
+                  memória de quem vive a experiência.
+                </p>
 
-              <ul className="mt-4 space-y-2 text-sm text-white/80">
-                <li>• Atendimento para produtores, cerimonialistas e artistas</li>
-                <li>• Projetos personalizados para cada estrutura de palco</li>
-                <li>• Foco total em segurança e impacto visual</li>
-              </ul>
+                <div className="grid gap-4 text-sm text-white/85 md:grid-cols-2">
+                  <div className="rounded-2xl bg-black/40 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-maguilaGold">
+                      Especialidades
+                    </p>
+                    <ul className="mt-2 space-y-1">
+                      <li>• Chamas e pirotecnia de palco</li>
+                      <li>• Faísca fria para cerimônias</li>
+                      <li>• Jatos de CO₂ e fumaça</li>
+                      <li>• Papel picado, fogos e efeitos de impacto</li>
+                    </ul>
+                  </div>
 
-              <div className="mt-6 text-sm text-white/70">
-                <p className="font-semibold text-white">Atuação em todo o Brasil*</p>
-                <p>
-                  *Consulte condições de deslocamento e disponibilidade de datas.
+                  <div className="rounded-2xl bg-black/40 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-maguilaGold">
+                      Diferenciais
+                    </p>
+                    <ul className="mt-2 space-y-1">
+                      <li>• Equipe treinada e alinhada ao rider técnico</li>
+                      <li>• Equipamentos profissionais e revisados</li>
+                      <li>• Planejamento integrado com produção</li>
+                      <li>• Foco em segurança e impacto visual</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-white/10 bg-black/50">
+                  <Image
+                    src="/images/foto-equipe1.jpeg"
+                    alt="Time MaguilaFX posicionado"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
+                <p className="text-xs text-white/65">
+                  Um time completo, preparado para operar grandes estruturas de
+                  palco e eventos de alta exigência técnica.
                 </p>
               </div>
             </div>
+          </motion.div>
+        </div>
 
-            {/* Formulário */}
-            <div className="rounded-3xl border border-white/15 bg-black/65 p-6 shadow-glow backdrop-blur">
-              <h3 className="text-lg font-semibold">Preencha para receber contato</h3>
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="mt-4 space-y-4 text-sm"
-              >
-                <div>
-                  <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
-                    Nome completo
-                  </label>
-                  <input
-                    type="text"
-                    {...register("nome")}
-                    className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
-                    placeholder="Como devemos te chamar?"
-                  />
-                  {errors.nome && (
-                    <p className="mt-1 text-xs text-red-400">
-                      {errors.nome.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div>
-                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
-                      WhatsApp
-                    </label>
-                    <input
-                      type="tel"
-                      {...register("whatsapp")}
-                      className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
-                      placeholder="(00) 00000-0000"
-                    />
-                    {errors.whatsapp && (
-                      <p className="mt-1 text-xs text-red-400">
-                        {errors.whatsapp.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
-                      Cidade / Estado
-                    </label>
-                    <input
-                      type="text"
-                      {...register("cidade")}
-                      className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
-                      placeholder="Cidade / UF"
-                    />
-                    {errors.cidade && (
-                      <p className="mt-1 text-xs text-red-400">
-                        {errors.cidade.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div>
-                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
-                      Tipo de evento
-                    </label>
-                    <input
-                      type="text"
-                      {...register("tipoEvento")}
-                      className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
-                      placeholder="Show, casamento, festival..."
-                    />
-                    {errors.tipoEvento && (
-                      <p className="mt-1 text-xs text-red-400">
-                        {errors.tipoEvento.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
-                      Data (se já tiver)
-                    </label>
-                    <input
-                      type="date"
-                      {...register("data")}
-                      className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
-                    Fale sobre o evento
-                  </label>
-                  <textarea
-                    rows={4}
-                    {...register("mensagem")}
-                    className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
-                    placeholder="Público estimado, local, estrutura de palco, tipo de atração..."
-                  />
-                  {errors.mensagem && (
-                    <p className="mt-1 text-xs text-red-400">
-                      {errors.mensagem.message}
-                    </p>
-                  )}
-                </div>
-
-                <button type="submit" className="btn-primary w-full" disabled={isSubmitting}>
-                  {isSubmitting ? "Enviando..." : "Enviar proposta"}
-                </button>
-
-                <p className="mt-2 text-[11px] text-white/60">
-                  Ao enviar, você autoriza contato via WhatsApp e e-mail para
-                  continuidade do atendimento.
+        {/* CONTATO */}
+        <div id="contato">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.3 }}
+            transition={{ duration: 0.8 }}
+            className="section-inner page-container pt-10 pb-20 md:pt-12 md:pb-24"
+          >
+            <div className="grid gap-10 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:items-center">
+              <div className="space-y-5">
+                <h2 className="text-3xl font-bold md:text-4xl">
+                  Vamos colocar <span className="text-maguilaRed">fogo</span> no
+                  seu próximo evento?
+                </h2>
+                <p className="max-w-xl text-sm md:text-base text-white/80">
+                  Conte um pouco sobre o que você está planejando. Nosso time vai
+                  analisar o evento e responder com uma proposta de efeitos
+                  especiais sob medida.
                 </p>
-              </form>
+
+                <ul className="mt-4 space-y-2 text-sm text-white/80">
+                  <li>• Atendimento para produtores, cerimonialistas e artistas</li>
+                  <li>• Projetos personalizados para cada estrutura de palco</li>
+                  <li>• Foco total em segurança e impacto visual</li>
+                </ul>
+
+                <div className="mt-6 text-sm text-white/70">
+                  <p className="font-semibold text-white">Atuação em todo o Brasil*</p>
+                  <p>
+                    *Consulte condições de deslocamento e disponibilidade de datas.
+                  </p>
+                </div>
+              </div>
+
+              {/* Formulário */}
+              <div className="rounded-3xl border border-white/15 bg-black/65 p-6 shadow-glow backdrop-blur">
+                <h3 className="text-lg font-semibold">Preencha para receber contato</h3>
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  className="mt-4 space-y-4 text-sm"
+                >
+                  <div>
+                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
+                      Nome completo
+                    </label>
+                    <input
+                      type="text"
+                      {...register("nome")}
+                      className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
+                      placeholder="Como devemos te chamar?"
+                    />
+                    {errors.nome && (
+                      <p className="mt-1 text-xs text-red-400">
+                        {errors.nome.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
+                        WhatsApp
+                      </label>
+                      <input
+                        type="tel"
+                        {...register("whatsapp")}
+                        className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
+                        placeholder="(00) 00000-0000"
+                      />
+                      {errors.whatsapp && (
+                        <p className="mt-1 text-xs text-red-400">
+                          {errors.whatsapp.message}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
+                        Cidade / Estado
+                      </label>
+                      <input
+                        type="text"
+                        {...register("cidade")}
+                        className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
+                        placeholder="Cidade / UF"
+                      />
+                      {errors.cidade && (
+                        <p className="mt-1 text-xs text-red-400">
+                          {errors.cidade.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
+                        Tipo de evento
+                      </label>
+                      <input
+                        type="text"
+                        {...register("tipoEvento")}
+                        className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
+                        placeholder="Show, casamento, festival..."
+                      />
+                      {errors.tipoEvento && (
+                        <p className="mt-1 text-xs text-red-400">
+                          {errors.tipoEvento.message}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
+                        Data (se já tiver)
+                      </label>
+                      <input
+                        type="date"
+                        {...register("data")}
+                        className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
+                      Fale sobre o evento
+                    </label>
+                    <textarea
+                      rows={4}
+                      {...register("mensagem")}
+                      className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
+                      placeholder="Público estimado, local, estrutura de palco, tipo de atração..."
+                    />
+                    {errors.mensagem && (
+                      <p className="mt-1 text-xs text-red-400">
+                        {errors.mensagem.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <button type="submit" className="btn-primary w-full" disabled={isSubmitting}>
+                    {isSubmitting ? "Enviando..." : "Enviar proposta"}
+                  </button>
+
+                  <p className="mt-2 text-[11px] text-white/60">
+                    Ao enviar, você autoriza contato via WhatsApp e e-mail para
+                    continuidade do atendimento.
+                  </p>
+                </form>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </section>
 
       {/* RODAPÉ */}
