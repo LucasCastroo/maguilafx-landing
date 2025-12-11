@@ -332,7 +332,7 @@ export default function HomePage() {
             <div>
               <h2 className="text-3xl font-bold md:text-4xl">
                 Portfólio de{" "}
-                <span className="text-maguilaRed">palcos inesquecíveis</span>.
+                <span className="text-maguilaRed">palcos inesquecíveis</span>
               </h2>
               <p className="mt-3 max-w-xl text-sm md:text-base text-white/80">
                 Alguns registros de produções que contaram com o time MaguilaFX
@@ -388,8 +388,23 @@ export default function HomePage() {
             transition={{ duration: 0.8 }}
             className="section-inner page-container pt-20 pb-10 md:pt-24 md:pb-12"
           >
-            <div className="grid gap-10 md:grid-cols-[1.1fr_minmax(0,1fr)] md:items-center">
+            <div className="grid gap-12 md:grid-cols-[1fr_1.2fr] md:items-start">
               <div className="space-y-5">
+                <div className="mb-4 inline-flex items-center gap-3 rounded-full bg-maguilaGold/10 px-5 py-2.5 border border-maguilaGold/30 backdrop-blur-md">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="text-maguilaGold"
+                  >
+                    <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-xs font-bold uppercase tracking-widest text-maguilaGold shadow-black drop-shadow-sm">
+                    Top 1 no Estado do Tocantins
+                  </span>
+                </div>
                 <h2 className="text-3xl font-bold md:text-4xl">
                   Quem é a <span className="text-maguilaRed">MaguilaFX</span>?
                 </h2>
@@ -431,6 +446,8 @@ export default function HomePage() {
                     </ul>
                   </div>
                 </div>
+
+
               </div>
 
               <div className="space-y-4">
@@ -439,14 +456,27 @@ export default function HomePage() {
                     src="/images/equipe/img-equipe-ofc.jpeg"
                     alt="Time MaguilaFX posicionado"
                     fill
-                    className="object-cover"
+                    className="object-cover transition-transform duration-700 hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
-                <p className="text-xs text-white/65">
-                  Um time completo, preparado para operar grandes estruturas de
-                  palco e eventos de alta exigência técnica.
-                </p>
+
+                <div className="mt-6 rounded-xl border border-maguilaRed/30 bg-gradient-to-r from-maguilaRed/10 to-transparent p-5">
+                  <div className="flex items-start gap-4">
+                    <div className="rounded-lg bg-maguilaRed/20 p-2 text-maguilaRed">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        <path d="M9 12l2 2 4-4" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white">Certificação Blaster Pirotécnico</h4>
+                      <p className="mt-1 text-xs text-white/70">
+                        Nossa empresa possui a carteira oficial de Blaster, comprovando treinamento técnico e habilitação legal para manuseio de pirotecnia com segurança total.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.div>
