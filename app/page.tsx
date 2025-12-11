@@ -332,48 +332,76 @@ export default function HomePage() {
             <div>
               <h2 className="text-3xl font-bold md:text-4xl">
                 Portfólio de{" "}
-                <span className="text-maguilaRed">palcos inesquecíveis</span>
+                <span className="text-maguilaRed">Eventos Inesquecíveis</span>
               </h2>
               <p className="mt-3 max-w-xl text-sm md:text-base text-white/80">
                 Alguns registros de produções que contaram com o time MaguilaFX
                 para elevar o impacto visual do espetáculo.
               </p>
             </div>
-            <p className="text-xs text-white/70">
-              Imagens reais do nosso trabalho.
-            </p>
+            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 backdrop-blur-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-maguilaRed">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <path d="M22 4L12 14.01l-3-3" />
+              </svg>
+              <span className="text-xs font-semibold uppercase tracking-wider text-white">
+                Imagens reais do nosso trabalho
+              </span>
+            </div>
           </div>
 
-          <div className="mt-8 grid gap-5 md:grid-cols-2">
-            <div className="space-y-5">
-              <PortfolioCard
-                src="/images/shows/show-1.png"
-                alt="Show com painéis de LED e efeitos de fumaça"
-                titulo="Festival ao vivo"
-                descricao="Efeitos de fumaça e luz integrados ao conteúdo de LED para criar camadas de profundidade no palco."
-              />
-              <PortfolioCard
-                src="/images/shows/show-5.jpg"
-                alt="DJ com máquinas de fogo no palco"
-                titulo="Set de DJ com chamas"
-                descricao="Máquinas de fogo trabalhando em sincronismo com os drops para criar momentos explosivos."
-              />
-            </div>
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            {/* Item Destaque 1 (Ocupa 2 colunas) */}
+            <PortfolioCard
+              className="md:col-span-2"
+              src="/images/shows/show-3.jpg"
+              alt="Grande queima de fogos em festival"
+              titulo="Turnês e Festivais"
+              descricao="Estruturas completas de efeitos especiais para acompanhar artistas e grandes festivais pelo Brasil. Soluções de alto impacto."
+            />
 
-            <div className="space-y-5">
-              <PortfolioCard
-                src="/images/casamentos/casamento-1.png"
-                alt="Cerimônia de casamento com faíscas frias"
-                titulo="Cerimônia dos sonhos"
-                descricao="Entrada dos noivos e primeira dança com faíscas frias e composição luminosa delicada."
-              />
-              <PortfolioCard
-                src="/images/equipe/img-equipe1.jpeg"
-                alt="Equipe MaguilaFX posicionada"
-                titulo="Operação de alto nível"
-                descricao="Time completo preparado para atuar em estruturas de grande porte com protocolos de segurança."
-              />
-            </div>
+            {/* Item Normal */}
+            <PortfolioCard
+              src="/images/casamentos/casamento-1.png"
+              alt="Cerimônia de casamento com faíscas frias"
+              titulo="Casamentos"
+              descricao="Charme e elegância com sparkles para momentos íntimos."
+            />
+
+            {/* Item Normal */}
+            <PortfolioCard
+              src="/images/shows/show-5.jpg"
+              alt="DJ com máquinas de fogo no palco"
+              titulo="Eletrônico"
+              descricao="Sincronia perfeita entre beats e chamas."
+            />
+
+            {/* Item Destaque 2 (Ocupa 2 colunas) */}
+            <PortfolioCard
+              className="md:col-span-2"
+              src="/images/shows/show-6.JPG"
+              alt="Show com painéis de LED e efeitos de fumaça"
+              titulo="Grandes Produções"
+              descricao="Integração total entre luz, vídeo e efeitos atmosféricos para criar profundidade de palco."
+            />
+
+            {/* Novos Items Adicionados */}
+            {/* Item Destaque 3 (Ocupa 2 colunas) */}
+            <PortfolioCard
+              className="md:col-span-2"
+              src="/images/shows/show-1.png"
+              alt="Show indoor com pirotecnia"
+              titulo="Corporativo & Indoor"
+              descricao="Efeitos seguros e controlados para ambientes fechados, garantindo o espetáculo sem riscos."
+            />
+
+            {/* Item Normal */}
+            <PortfolioCard
+              src="/images/shows/show-balsas.jpg"
+              alt="Detalhe de efeito especial"
+              titulo="Efeitos Especiais"
+              descricao="Detalhes que fazem a diferença na composição visual."
+            />
           </div>
         </motion.div>
       </section>
@@ -672,14 +700,6 @@ export default function HomePage() {
                 </li>
                 <li>
                   <a
-                    href="#sobre"
-                    className="transition-colors hover:text-maguilaRed"
-                  >
-                    Sobre
-                  </a>
-                </li>
-                <li>
-                  <a
                     href="#equipamentos"
                     className="transition-colors hover:text-maguilaRed"
                   >
@@ -692,6 +712,14 @@ export default function HomePage() {
                     className="transition-colors hover:text-maguilaRed"
                   >
                     Portfólio
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#sobre"
+                    className="transition-colors hover:text-maguilaRed"
+                  >
+                    Sobre
                   </a>
                 </li>
                 <li>
@@ -762,7 +790,7 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
-    </main>
+    </main >
   );
 }
 
@@ -771,16 +799,34 @@ type PortfolioCardProps = {
   alt: string;
   titulo: string;
   descricao: string;
+  className?: string;
 };
 
-function PortfolioCard({ src, alt, titulo, descricao }: PortfolioCardProps) {
+function PortfolioCard({ src, alt, titulo, descricao, className = "" }: PortfolioCardProps) {
   return (
-    <article className="hover-fire-card rounded-3xl bg-black/70 p-4 backdrop-blur">
-      <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
-        <Image src={src} alt={alt} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
+    <article className={`group relative overflow-hidden rounded-3xl bg-black/50 ${className}`}>
+      {/* Imagem de Fundo com Zoom no Hover */}
+      <div className="relative h-full min-h-[300px] w-full md:min-h-[450px]">
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+        {/* Overlay Escuro para leitura do texto */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-90" />
       </div>
-      <h3 className="mt-3 text-base font-semibold md:text-lg">{titulo}</h3>
-      <p className="mt-1 text-sm text-white/80">{descricao}</p>
+
+      {/* Conteúdo Sobreposto: Visível por padrão no Mobile, Animação no Desktop */}
+      <div className="absolute bottom-0 left-0 w-full p-6 md:p-8">
+        <h3 className="text-xl font-bold text-white transition-transform duration-500 md:translate-y-2 md:text-2xl md:group-hover:translate-y-0">
+          {titulo}
+        </h3>
+        <p className="mt-2 text-sm text-white/80 transition-all duration-500 md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100">
+          {descricao}
+        </p>
+      </div>
     </article>
   );
 }
