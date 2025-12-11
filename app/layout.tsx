@@ -6,9 +6,9 @@ export const metadata: Metadata = {
   title: "MaguilaFX | Efeitos Pirotécnicos",
   description: "Efeitos pirotécnicos para shows, casamentos e grandes eventos.",
   icons: {
-    icon: "/images/logo-mini-light.png",
-    shortcut: "/images/logo-mini-light.png",
-    apple: "/images/logo-mini-light.png",
+    icon: "/images/logos/logo-mini-light.png",
+    shortcut: "/images/logos/logo-mini-light.png",
+    apple: "/images/logos/logo-mini-light.png",
   },
 };
 

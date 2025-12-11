@@ -37,7 +37,7 @@ export function Header() {
         <Link href="#inicio" className="flex items-center gap-2">
           <div className="relative h-9 w-9">
             <Image
-              src="/images/logo-mini-light.png"
+              src="/images/logos/logo-mini-light.png"
               alt="MaguilaFX"
               fill
               className="object-contain"

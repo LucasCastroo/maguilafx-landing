@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const contatoSchema = z.object({
   nome: z.string().min(2, "Nome obrigatório"),
@@ -17,7 +18,67 @@ const contatoSchema = z.object({
 
 type ContatoFormData = z.infer<typeof contatoSchema>;
 
+const equipmentCategories = [
+  {
+    id: "sparkular",
+    label: "Sparkular",
+    title: "Sparkular (Faísca Fria)",
+    description: "Efeito de pirotecnia indoor totalmente seguro. Não queima, não gera fumaça e é perfeito para proximidade. Ideal para casamentos, entradas triunfais e palcos menores onde a segurança é prioridade.",
+    specs: ["Altura: Ajustável 1m a 5m", "Uso: Indoor e Outdoor", "Segurança: Não queima a pele"],
+    image: "/images/equipamentos/equipamento-1-sparkular.png",
+  },
+  {
+    id: "flame",
+    label: "Flame Machines",
+    title: "Flame Machines",
+    description: "Jatos de fogo reais controlados via DMX. Altura e duração ajustáveis para momentos de clímax. O calor e o visual impactante que todo grande show merece.",
+    specs: ["Chama Real", "Controle DMX 512", "Sistemas de Segurança Anti-Tombamento"],
+    image: "/images/equipamentos/equipamento-2-flame.png",
+  },
+  {
+    id: "co2",
+    label: "Jatos CO²",
+    title: "Jatos de CO² & Fumaça",
+    description: "Colunas de fumaça criogênica de desaparecimento rápido. O efeito refrescante e visualmente explosivo, perfeito para drops de música eletrônica e revelações.",
+    specs: ["Efeito Criogênico (Gelado)", "Desaparecimento Instantâneo", "Iluminação LED Integrada"],
+    image: "/images/equipamentos/equipamento-3-co2.jpg",
+  },
+  {
+    id: "smoke-bubble",
+    label: "Smoke Bubble",
+    title: "Smoke Bubble",
+    description: "Bolhas de sabão recheadas com fumaça. Ao estourarem, liberam uma névoa mágica. Um efeito lúdico, inovador e surpreendente para momentos especiais.",
+    specs: ["Bolhas com Fumaça", "Luz UV para efeito neon", "Alto rendimento de bolhas"],
+    image: "/images/equipamentos/equipamento-4-bubble.png",
+  },
+  {
+    id: "stadium-shot",
+    label: "Stadium Shot",
+    title: "Stadium Shot",
+    description: "Disparos massivos de papel picado (confete) ou serpentinas. Cubra a multidão com cores e alegria em segundos. O grand finale perfeito para grandes festivais.",
+    specs: ["Alcance: Até 20 metros", "Consumível: Papel ou Serpentina", "Acionamento elétrico imediato"],
+    image: "/images/equipamentos/equipamento-5-shot.png",
+  },
+  {
+    id: "laser",
+    label: "Laser Holográfico",
+    title: "Laser Holográfico",
+    description: "Projeções laser de alta definição, criando túneis, formas geométricas 3D e 'céus estrelados'. Tecnologia que transforma a atmosfera do ambiente.",
+    specs: ["Cores RGB Full Color", "Formas Geométricas e Volumétricas", "Sincronia total com a música"],
+    image: "/images/equipamentos/equipamento-6-laser.jpg",
+  },
+  {
+    id: "low-fog",
+    label: "Gelo Seco",
+    title: "Máquina de Gelo Seco (Low Fog)",
+    description: "Efeito clássico de 'nuvens no chão'. A fumaça densa permanece baixa, criando um visual etéreo e romântico, ideal para valsas e performances artísticas.",
+    specs: ["Efeito Nuvem (Fumaça Baixa)", "À base de água ou gelo seco", "Não deixa resíduos ou cheiro"],
+    image: "/images/equipamentos/equipamento-7-lowfog.jpg",
+  },
+];
+
 export default function HomePage() {
+  const [activeTab, setActiveTab] = useState(equipmentCategories[0].id);
   const {
     register,
     handleSubmit,
@@ -40,7 +101,7 @@ export default function HomePage() {
         id="inicio"
         className="section-bg section-with-fire flex min-h-screen items-center"
         style={{
-          ["--section-bg-image" as any]: "url('/images/background-section-1.png')",
+          ["--section-bg-image" as any]: "url('/images/background/background-1.png')",
         }}
       >
         <motion.div
@@ -52,7 +113,7 @@ export default function HomePage() {
           <div className="mx-auto mt-5 flex max-w-4xl flex-col items-center text-center">
             {/* Logo */}
             <Image
-              src="/images/logo-full-light.png"
+              src="/images/logos/logo-full-light.png"
               alt="Logo MaguilaFX"
               width={1000}
               height={300}
@@ -118,7 +179,7 @@ export default function HomePage() {
         id="equipamentos"
         className="section-bg"
         style={{
-          ["--section-bg-image" as any]: "url('/images/img-1.png')",
+          ["--section-bg-image" as any]: "url('/images/background/background-2.png')",
         }}
       >
         <motion.div
@@ -146,62 +207,107 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {/* Flame Machines */}
-            <div className="hover-fire-card rounded-3xl bg-black/60 p-4 backdrop-blur">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
-                <Image
-                  src="/images/img-fire-machine.png"
-                  alt="Máquina de Fogo"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold">
-                Flame Machines
-              </h3>
-              <p className="mt-2 text-sm text-white/80">
-                Jatos de fogo reais controlados via DMX. Altura e duração ajustáveis para momentos de clímax.
-              </p>
+          <div className="mt-10 flex flex-col gap-8 lg:flex-row">
+            {/* Navegação (Tabs) */}
+            <div className="flex gap-2 overflow-x-auto pb-4 lg:w-1/4 lg:flex-col lg:overflow-visible lg:pb-0">
+              {equipmentCategories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveTab(cat.id)}
+                  className={`group relative flex items-center rounded-xl p-4 text-left transition-all hover:bg-white/5 ${activeTab === cat.id
+                    ? "bg-white/10 text-white shadow-glow"
+                    : "text-white/60 hover:text-white"
+                    }`}
+                >
+                  <div className="relative z-10 flex w-full items-center justify-between">
+                    <span className="text-sm font-bold uppercase tracking-wider">
+                      {cat.label}
+                    </span>
+                    {activeTab === cat.id && (
+                      <motion.div
+                        layoutId="activeTabIndicator"
+                        className="h-2 w-2 rounded-full bg-maguilaRed"
+                      />
+                    )}
+                  </div>
+                  {activeTab === cat.id && (
+                    <motion.div
+                      layoutId="activeTabBg"
+                      className="absolute inset-0 rounded-xl border border-maguilaRed/30 bg-maguilaRed/5"
+                    />
+                  )}
+                </button>
+              ))}
             </div>
 
-            {/* Sparkulars */}
-            <div className="hover-fire-card rounded-3xl bg-black/60 p-4 backdrop-blur">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
-                <Image
-                  src="/images/sparkular-machine.jpg"
-                  alt="Sparkular - Faísca Fria"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold">
-                Sparkulars (Faísca Fria)
-              </h3>
-              <p className="mt-2 text-sm text-white/80">
-                Efeito de pirotecnia indoor totalmente seguro. Não queima, não gera fumaça e é perfeito para proximidade.
-              </p>
-            </div>
+            {/* Conteúdo Dinâmico */}
+            <div className="relative min-h-[450px] flex-1">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.4 }}
+                  className="grid gap-8 md:grid-cols-2 lg:gap-12"
+                >
+                  {/* Imagem Principal */}
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-white/10 bg-black/50 md:aspect-square lg:aspect-[4/5]">
+                    {/* Fallback visual caso a imagem não exista ainda */}
+                    <div className="absolute inset-0 z-0 bg-gradient-to-br from-gray-900 to-black" />
 
-            {/* CO2 Jets */}
-            <div className="hover-fire-card rounded-3xl bg-black/60 p-4 backdrop-blur">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
-                <Image
-                  src="/images/jato-co2.jpg"
-                  alt="Jatos de CO2"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold">
-                Jatos de CO₂ & Fumaça
-              </h3>
-              <p className="mt-2 text-sm text-white/80">
-                Colunas de fumaça criogênica de desaparecimento rápido (CO₂) e máquinas de fumaça de alta densidade.
-              </p>
+                    <Image
+                      src={
+                        equipmentCategories.find((c) => c.id === activeTab)?.image || ""
+                      }
+                      alt={equipmentCategories.find((c) => c.id === activeTab)?.title || ""}
+                      fill
+                      className="relative z-10 object-cover transition-transform duration-700 hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+
+                    {/* Badge decorativa */}
+                    <div className="absolute bottom-4 left-4 z-20 rounded-lg border border-white/20 bg-black/60 px-3 py-1.5 backdrop-blur">
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-maguilaRed">
+                        Profissional
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Informações */}
+                  <div className="flex flex-col justify-center space-y-6">
+                    <div>
+                      <h3 className="text-2xl font-bold md:text-3xl text-white">
+                        {equipmentCategories.find((c) => c.id === activeTab)?.title}
+                      </h3>
+                      <p className="mt-4 text-sm leading-relaxed text-white/80 md:text-base">
+                        {
+                          equipmentCategories.find((c) => c.id === activeTab)
+                            ?.description
+                        }
+                      </p>
+                    </div>
+
+                    <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-5">
+                      <p className="text-xs font-semibold uppercase tracking-widest text-white/50">
+                        Especificações Técnicas
+                      </p>
+                      <ul className="space-y-2">
+                        {equipmentCategories
+                          .find((c) => c.id === activeTab)
+                          ?.specs.map((spec, index) => (
+                            <li key={index} className="flex items-center gap-2 text-sm text-white/90">
+                              <span className="h-1.5 w-1.5 rounded-full bg-maguilaRed" />
+                              {spec}
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+
+
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </motion.div>
@@ -212,7 +318,7 @@ export default function HomePage() {
         id="portfolio"
         className="section-bg"
         style={{
-          ["--section-bg-image" as any]: "url('/images/img-fire-machine.png')",
+          ["--section-bg-image" as any]: "url('/images/background/background-5.png')",
         }}
       >
         <motion.div
@@ -241,13 +347,13 @@ export default function HomePage() {
           <div className="mt-8 grid gap-5 md:grid-cols-2">
             <div className="space-y-5">
               <PortfolioCard
-                src="/images/img-1.png"
+                src="/images/shows/show-1.png"
                 alt="Show com painéis de LED e efeitos de fumaça"
                 titulo="Festival ao vivo"
                 descricao="Efeitos de fumaça e luz integrados ao conteúdo de LED para criar camadas de profundidade no palco."
               />
               <PortfolioCard
-                src="/images/set-dj.jpg"
+                src="/images/shows/show-5.jpg"
                 alt="DJ com máquinas de fogo no palco"
                 titulo="Set de DJ com chamas"
                 descricao="Máquinas de fogo trabalhando em sincronismo com os drops para criar momentos explosivos."
@@ -256,13 +362,13 @@ export default function HomePage() {
 
             <div className="space-y-5">
               <PortfolioCard
-                src="/images/img-casamento.png"
+                src="/images/casamentos/casamento-1.png"
                 alt="Cerimônia de casamento com faíscas frias"
                 titulo="Cerimônia dos sonhos"
                 descricao="Entrada dos noivos e primeira dança com faíscas frias e composição luminosa delicada."
               />
               <PortfolioCard
-                src="/images/foto-equipe3.jpeg"
+                src="/images/equipe/img-equipe1.jpeg"
                 alt="Equipe MaguilaFX posicionada"
                 titulo="Operação de alto nível"
                 descricao="Time completo preparado para atuar em estruturas de grande porte com protocolos de segurança."
@@ -330,7 +436,7 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-white/10 bg-black/50">
                   <Image
-                    src="/images/foto-equipe1.jpeg"
+                    src="/images/equipe/img-equipe-ofc.jpeg"
                     alt="Time MaguilaFX posicionado"
                     fill
                     className="object-cover"
