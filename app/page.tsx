@@ -614,7 +614,7 @@ export default function HomePage() {
             {/* Coluna 1: Logo e Descrição */}
             <div className="space-y-4 md:col-span-2">
               <Image
-                src="/images/logo-full-light.png"
+                src="/images/logos/logo-full-light.png"
                 alt="MaguilaFX"
                 width={160}
                 height={50}
