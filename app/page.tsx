@@ -182,11 +182,23 @@ export default function HomePage() {
           ["--section-bg-image" as any]: "url('/images/background/background-2.png')",
         }}
       >
+        <div className="hidden">
+          {equipmentCategories.map((cat) => (
+            <Image
+              key={cat.id}
+              src={cat.image}
+              alt={cat.title}
+              width={1}
+              height={1}
+              priority
+            />
+          ))}
+        </div>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
-          transition={{ duration: 0.8 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="section-inner page-container py-20 md:py-24"
         >
           <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
@@ -324,8 +336,8 @@ export default function HomePage() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
-          transition={{ duration: 0.8 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="section-inner page-container py-20 md:py-24"
         >
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -358,6 +370,7 @@ export default function HomePage() {
               alt="Grande queima de fogos em festival"
               titulo="Turnês e Festivais"
               descricao="Estruturas completas de efeitos especiais para acompanhar artistas e grandes festivais pelo Brasil. Soluções de alto impacto."
+              priority
             />
 
             {/* Item Normal */}
@@ -366,6 +379,7 @@ export default function HomePage() {
               alt="Cerimônia de casamento com faíscas frias"
               titulo="Casamentos"
               descricao="Charme e elegância com sparkles para momentos íntimos."
+              priority
             />
 
             {/* Item Normal */}
@@ -374,6 +388,7 @@ export default function HomePage() {
               alt="DJ com máquinas de fogo no palco"
               titulo="Eletrônico"
               descricao="Sincronia perfeita entre beats e chamas."
+              priority
             />
 
             {/* Item Destaque 2 (Ocupa 2 colunas) */}
@@ -383,6 +398,7 @@ export default function HomePage() {
               alt="Show com painéis de LED e efeitos de fumaça"
               titulo="Grandes Produções"
               descricao="Integração total entre luz, vídeo e efeitos atmosféricos para criar profundidade de palco."
+              priority
             />
 
             {/* Novos Items Adicionados */}
@@ -393,14 +409,16 @@ export default function HomePage() {
               alt="Show indoor com pirotecnia"
               titulo="Corporativo & Indoor"
               descricao="Efeitos seguros e controlados para ambientes fechados, garantindo o espetáculo sem riscos."
+              priority
             />
 
             {/* Item Normal */}
             <PortfolioCard
-              src="/images/shows/show-balsas.jpg"
+              src="/images/shows/show-balsas.JPG"
               alt="Detalhe de efeito especial"
               titulo="Efeitos Especiais"
               descricao="Detalhes que fazem a diferença na composição visual."
+              priority
             />
           </div>
         </motion.div>
@@ -800,9 +818,10 @@ type PortfolioCardProps = {
   titulo: string;
   descricao: string;
   className?: string;
+  priority?: boolean;
 };
 
-function PortfolioCard({ src, alt, titulo, descricao, className = "" }: PortfolioCardProps) {
+function PortfolioCard({ src, alt, titulo, descricao, className = "", priority = false }: PortfolioCardProps) {
   return (
     <article className={`group relative overflow-hidden rounded-3xl bg-black/50 ${className}`}>
       {/* Imagem de Fundo com Zoom no Hover */}
@@ -811,6 +830,7 @@ function PortfolioCard({ src, alt, titulo, descricao, className = "" }: Portfoli
           src={src}
           alt={alt}
           fill
+          priority={priority}
           className="object-cover transition-transform duration-700 group-hover:scale-110"
           sizes="(max-width: 768px) 100vw, 50vw"
         />
