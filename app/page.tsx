@@ -107,6 +107,18 @@ export default function HomePage() {
     reset();
   };
 
+  const currentTab = equipmentCategories.findIndex((c) => c.id === activeTab);
+
+  const handleNext = () => {
+    const next = (currentTab + 1) % equipmentCategories.length;
+    setActiveTab(equipmentCategories[next].id);
+  };
+
+  const handlePrev = () => {
+    const prev = (currentTab - 1 + equipmentCategories.length) % equipmentCategories.length;
+    setActiveTab(equipmentCategories[prev].id);
+  };
+
   return (
     <main className="flex min-h-screen flex-col bg-maguilaDark">
       {/* HERO */}
@@ -290,6 +302,25 @@ export default function HomePage() {
                       className="relative z-10 object-cover transition-transform duration-700 hover:scale-105"
                       sizes="(max-width: 768px) 100vw, 50vw"
                     />
+
+                    {/* Botões de Navegação Mobile */}
+                    <div className="absolute inset-0 z-20 flex items-center justify-between px-2 lg:hidden pointer-events-none">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handlePrev(); }}
+                        className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-md transition hover:bg-black/80 active:scale-95 border border-white/10"
+                        aria-label="Anterior"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+                      </button>
+
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleNext(); }}
+                        className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-md transition hover:bg-black/80 active:scale-95 border border-white/10"
+                        aria-label="Próximo"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+                      </button>
+                    </div>
 
                     {/* Badge decorativa */}
                     <div className="absolute bottom-4 left-4 z-20 rounded-lg border border-white/20 bg-black/60 px-3 py-1.5 backdrop-blur">
