@@ -101,7 +101,7 @@ export default function HomePage() {
 
     const message = `*Olá, equipe MaguilaFX!* 👋\n\nEstou vindo do site e gostaria de solicitar um orçamento para um evento com efeitos especiais.\n\n*Nome:* ${data.nome}\n*Cidade e Estado do Evento:* ${data.cidade}/${data.estado}\n*Tipo de Evento:* ${data.tipoEvento}\n*Data Prevista:* ${dataFormatada}\n\n*Descrição do Evento:*\n${data.descricao}`;
 
-    const whatsappUrl = `https://wa.me/556392154511?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/556392252302?text=${encodeURIComponent(message)}`;
 
     window.open(whatsappUrl, '_blank');
     reset();
