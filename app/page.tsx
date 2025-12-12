@@ -583,7 +583,7 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-white/10 bg-black/50">
                   <Image
-                    src="/images/equipe/img-equipe-ofc.JPEG"
+                    src="/images/equipe/img-equipe-ofc.png"
                     alt="Time MaguilaFX posicionado"
                     fill
                     className="object-cover transition-transform duration-700 hover:scale-105"
