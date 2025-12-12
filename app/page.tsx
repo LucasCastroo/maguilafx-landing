@@ -1,11 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "framer-motion";
+import DatePicker, { registerLocale } from "react-datepicker";
+import { ptBR } from "date-fns/locale/pt-BR";
+import "react-datepicker/dist/react-datepicker.css";
+
+registerLocale("pt-BR", ptBR);
 
 const contatoSchema = z.object({
   nome: z.string().min(2, "Nome obrigatório"),
@@ -17,6 +22,29 @@ const contatoSchema = z.object({
 });
 
 type ContatoFormData = z.infer<typeof contatoSchema>;
+
+const EquipmentImage = ({ src, alt }: { src: string; alt: string }) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  return (
+    <>
+      {isLoading && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-white/20 border-t-maguilaRed" />
+        </div>
+      )}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        onLoad={() => setIsLoading(false)}
+        className={`relative z-10 object-cover transition-transform duration-700 hover:scale-105 ${isLoading ? "scale-110 blur-sm grayscale" : "scale-100 blur-0 grayscale-0"
+          }`}
+        sizes="(max-width: 768px) 100vw, 50vw"
+      />
+    </>
+  );
+};
 
 const equipmentCategories = [
   {
@@ -78,10 +106,20 @@ const equipmentCategories = [
 ];
 
 export default function HomePage() {
+  const [minDate, setMinDate] = useState("");
   const [activeTab, setActiveTab] = useState(equipmentCategories[0].id);
+
+  useEffect(() => {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    setMinDate(`${yyyy}-${mm}-${dd}`);
+  }, []);
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<ContatoFormData>({
@@ -91,11 +129,15 @@ export default function HomePage() {
   const onSubmit = (data: ContatoFormData) => {
     let dataFormatada = 'Não definida';
     if (data.data) {
-      const parts = data.data.split('-'); // YYYY-MM-DD
-      if (parts.length === 3) {
-        dataFormatada = `${parts[2]}/${parts[1]}/${parts[0]}`;
+      // Se for objeto Date (do react-datepicker), formata. Se for string, usa direto.
+      const dateObj = new Date(data.data);
+      if (!isNaN(dateObj.getTime())) {
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const year = dateObj.getFullYear();
+        dataFormatada = `${day}/${month}/${year}`;
       } else {
-        dataFormatada = data.data;
+        dataFormatada = String(data.data);
       }
     }
 
@@ -293,14 +335,11 @@ export default function HomePage() {
                     {/* Fallback visual caso a imagem não exista ainda */}
                     <div className="absolute inset-0 z-0 bg-gradient-to-br from-gray-900 to-black" />
 
-                    <Image
+                    <EquipmentImage
                       src={
                         equipmentCategories.find((c) => c.id === activeTab)?.image || ""
                       }
                       alt={equipmentCategories.find((c) => c.id === activeTab)?.title || ""}
-                      fill
-                      className="relative z-10 object-cover transition-transform duration-700 hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
 
                     {/* Botões de Navegação Mobile */}
@@ -688,10 +727,22 @@ export default function HomePage() {
                       <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
                         Data (se já tiver)
                       </label>
-                      <input
-                        type="date"
-                        {...register("data")}
-                        className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
+                      <Controller
+                        control={control}
+                        name="data"
+                        render={({ field }) => (
+                          <DatePicker
+                            selected={field.value ? new Date(field.value) : null}
+                            onChange={(date: Date | null) => field.onChange(date ? date.toISOString() : "")}
+                            dateFormat="dd/MM/yyyy"
+                            locale="pt-BR"
+                            minDate={new Date()}
+                            placeholderText="__/__/____"
+                            className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed text-white placeholder:text-white/40"
+                            calendarClassName="maguila-datepicker"
+                            showPopperArrow={false}
+                          />
+                        )}
                       />
                     </div>
                   </div>

@@ -92,3 +92,93 @@ body {
     z-index: 0;
   }
 }
+
+/* =========================================
+   React DatePicker Customization (MaguilaFX Theme)
+   ========================================= */
+.maguila-datepicker {
+  background-color: #050509 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  font-family: inherit !important;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 42, 42, 0.2) !important;
+  border-radius: 16px !important;
+  padding: 10px !important;
+  overflow: hidden;
+  color: #fff !important;
+}
+
+.maguila-datepicker .react-datepicker__header {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 10px 10px 0 0 !important;
+}
+
+.maguila-datepicker .react-datepicker__current-month,
+.maguila-datepicker .react-datepicker__day-name {
+  color: #fff !important;
+}
+
+.maguila-datepicker .react-datepicker__day {
+  color: rgba(255, 255, 255, 0.8) !important;
+  transition: all 0.2s ease !important;
+  border-radius: 8px !important;
+}
+
+.maguila-datepicker .react-datepicker__day:hover {
+  background-color: rgba(255, 42, 42, 0.3) !important;
+  color: #fff !important;
+}
+
+.maguila-datepicker .react-datepicker__day--selected,
+.maguila-datepicker .react-datepicker__day--keyboard-selected {
+  background-color: #FF2A2A !important;
+  color: #fff !important;
+  box-shadow: 0 0 15px rgba(255, 42, 42, 0.6);
+  font-weight: bold;
+}
+
+.maguila-datepicker .react-datepicker__day--disabled {
+  color: rgba(255, 255, 255, 0.1) !important;
+  pointer-events: none;
+}
+
+/* Navegação customizada (Setas) */
+.maguila-datepicker .react-datepicker__navigation-icon::before {
+  border-color: #fff !important;
+  border-width: 2px 2px 0 0 !important;
+}
+
+.maguila-datepicker .react-datepicker__triangle {
+  display: none !important;
+}
+
+/* Remover focus outline feio */
+.react-datepicker__day:focus {
+  outline: none !important;
+}
+
+/* Customização do Calendário (Date Picker) */
+input[type="date"] {
+  color-scheme: dark;
+  accent-color: #FF2A2A;
+  /* MaguilaRed para seleção */
+}
+
+/* Ícone do calendário */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  padding: 5px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  /* Garante que o ícone padrão (branco em color-scheme dark) permaneça visível */
+  filter: invert(0);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  background-color: rgba(255, 42, 42, 0.1);
+  /* Filtro preciso para converter branco/preto em MaguilaRed (#FF2A2A) */
+  filter: invert(24%) sepia(93%) saturate(7456%) hue-rotate(356deg) brightness(97%) contrast(117%);
+}
