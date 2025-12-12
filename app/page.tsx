@@ -9,11 +9,11 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const contatoSchema = z.object({
   nome: z.string().min(2, "Nome obrigatório"),
-  whatsapp: z.string().min(8, "WhatsApp obrigatório"),
   cidade: z.string().min(2, "Cidade obrigatória"),
+  estado: z.string().min(2, "Estado obrigatório"),
   tipoEvento: z.string().min(2, "Informe o tipo de evento"),
   data: z.string().optional(),
-  mensagem: z.string().min(5, "Conte um pouco sobre o evento"),
+  descricao: z.string().min(5, "Conte um pouco sobre o evento"),
 });
 
 type ContatoFormData = z.infer<typeof contatoSchema>;
@@ -40,7 +40,7 @@ const equipmentCategories = [
     label: "Jatos CO²",
     title: "Jatos de CO² & Fumaça",
     description: "Colunas de fumaça criogênica de desaparecimento rápido. O efeito refrescante e visualmente explosivo, perfeito para drops de música eletrônica e revelações.",
-    specs: ["Efeito Criogênico (Gelado)", "Desaparecimento Instantâneo", "Iluminação LED Integrada"],
+    specs: ["Efeito Criogênico (Gelado)", "Desaparecimento Instantâneo"],
     image: "/images/equipamentos/equipamento-3-co2.jpg",
   },
   {
@@ -48,7 +48,7 @@ const equipmentCategories = [
     label: "Smoke Bubble",
     title: "Smoke Bubble",
     description: "Bolhas de sabão recheadas com fumaça. Ao estourarem, liberam uma névoa mágica. Um efeito lúdico, inovador e surpreendente para momentos especiais.",
-    specs: ["Bolhas com Fumaça", "Luz UV para efeito neon", "Alto rendimento de bolhas"],
+    specs: ["Bolhas com Fumaça", "Alto rendimento de bolhas"],
     image: "/images/equipamentos/equipamento-4-bubble.png",
   },
   {
@@ -89,8 +89,21 @@ export default function HomePage() {
   });
 
   const onSubmit = (data: ContatoFormData) => {
-    console.log("Formulário enviado:", data);
-    alert("Formulário enviado! Em breve entraremos em contato.");
+    let dataFormatada = 'Não definida';
+    if (data.data) {
+      const parts = data.data.split('-'); // YYYY-MM-DD
+      if (parts.length === 3) {
+        dataFormatada = `${parts[2]}/${parts[1]}/${parts[0]}`;
+      } else {
+        dataFormatada = data.data;
+      }
+    }
+
+    const message = `*Olá, equipe MaguilaFX!* 👋\n\nEstou vindo do site e gostaria de solicitar um orçamento para um evento com efeitos especiais.\n\n*Nome:* ${data.nome}\n*Cidade e Estado do Evento:* ${data.cidade}/${data.estado}\n*Tipo de Evento:* ${data.tipoEvento}\n*Data Prevista:* ${dataFormatada}\n\n*Descrição do Evento:*\n${data.descricao}`;
+
+    const whatsappUrl = `https://wa.me/556392154511?text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappUrl, '_blank');
     reset();
   };
 
@@ -477,6 +490,7 @@ export default function HomePage() {
                       <li>• Faísca fria para cerimônias</li>
                       <li>• Jatos de CO₂ e fumaça</li>
                       <li>• Papel picado, fogos e efeitos de impacto</li>
+                      <li>• Laser holográfico</li>
                     </ul>
                   </div>
 
@@ -590,33 +604,33 @@ export default function HomePage() {
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
                       <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
-                        WhatsApp
-                      </label>
-                      <input
-                        type="tel"
-                        {...register("whatsapp")}
-                        className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
-                        placeholder="(00) 00000-0000"
-                      />
-                      {errors.whatsapp && (
-                        <p className="mt-1 text-xs text-red-400">
-                          {errors.whatsapp.message}
-                        </p>
-                      )}
-                    </div>
-                    <div>
-                      <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
-                        Cidade / Estado
+                        Cidade do evento
                       </label>
                       <input
                         type="text"
                         {...register("cidade")}
                         className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
-                        placeholder="Cidade / UF"
+                        placeholder="Cidade"
                       />
                       {errors.cidade && (
                         <p className="mt-1 text-xs text-red-400">
                           {errors.cidade.message}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
+                        Estado
+                      </label>
+                      <input
+                        type="text"
+                        {...register("estado")}
+                        className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
+                        placeholder="UF"
+                      />
+                      {errors.estado && (
+                        <p className="mt-1 text-xs text-red-400">
+                          {errors.estado.message}
                         </p>
                       )}
                     </div>
@@ -653,17 +667,17 @@ export default function HomePage() {
 
                   <div>
                     <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
-                      Fale sobre o evento
+                      Descrição
                     </label>
                     <textarea
                       rows={4}
-                      {...register("mensagem")}
+                      {...register("descricao")}
                       className="w-full rounded-xl border border-white/20 bg-black/70 px-3 py-2 outline-none transition focus:border-maguilaRed"
                       placeholder="Público estimado, local, estrutura de palco, tipo de atração..."
                     />
-                    {errors.mensagem && (
+                    {errors.descricao && (
                       <p className="mt-1 text-xs text-red-400">
-                        {errors.mensagem.message}
+                        {errors.descricao.message}
                       </p>
                     )}
                   </div>
@@ -672,8 +686,8 @@ export default function HomePage() {
                     {isSubmitting ? "Enviando..." : "Enviar proposta"}
                   </button>
 
-                  <p className="mt-2 text-[11px] text-white/60">
-                    Ao enviar, você autoriza contato via WhatsApp e e-mail para
+                  <p className="mt-2 text-[11px] text-white/60 text-center">
+                    Ao enviar, você autoriza contato via WhatsApp para
                     continuidade do atendimento.
                   </p>
                 </form>
