@@ -33,7 +33,7 @@ export function Header() {
       `}
     >
       <div className="page-container flex h-16 items-center justify-between">
-        {/* Logo + nome */}
+        {/* Logo + nome*/}
         <Link href="#inicio" className="flex items-center gap-2">
           <div className="relative h-9 w-9">
             <Image
@@ -50,7 +50,7 @@ export function Header() {
           </span>
         </Link>
 
-        {/* Navegação desktop */}
+        {/* Navegação desktop*/}
         <nav className="hidden items-center gap-6 text-xs font-medium uppercase tracking-[0.25em] text-white/60 md:flex">
           {navItems.map((item) => (
             <Link
