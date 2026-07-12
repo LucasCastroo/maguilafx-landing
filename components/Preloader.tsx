@@ -65,6 +65,7 @@ export function Preloader() {
             </p>
             <p className="font-display text-5xl leading-none text-bone/90 md:text-6xl">
               {progress}
+              <span className="text-2xl text-bone/50 md:text-3xl">%</span>
             </p>
           </div>
 

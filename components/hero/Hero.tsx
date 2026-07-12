@@ -116,7 +116,7 @@ export function Hero() {
           Efeitos pirotécnicos &amp; especiais
         </motion.p>
 
-        <h1 className="display-title text-[clamp(3.4rem,11vw,10.5rem)]">
+        <h1 className="display-title text-[clamp(2.5rem,6.2vw,6rem)]">
           <RevealLine delay={BASE_DELAY + 0.08}>Momentos que</RevealLine>
           <RevealLine delay={BASE_DELAY + 0.18} className="text-maguilaRed">
             explodem

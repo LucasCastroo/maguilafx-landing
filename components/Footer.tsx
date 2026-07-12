@@ -71,7 +71,7 @@ export function Footer() {
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 1.1, ease: EASE }}
           aria-hidden
-          className="mt-16 select-none whitespace-nowrap text-center font-display text-[clamp(4rem,15.5vw,17rem)] leading-[0.8] text-bone/90 md:mt-20"
+          className="mt-16 select-none whitespace-nowrap text-center font-display text-[clamp(3rem,10.5vw,11rem)] leading-[0.8] text-bone/90 md:mt-20"
         >
           Maguila<span className="text-maguilaRed">FX</span>
         </motion.p>
