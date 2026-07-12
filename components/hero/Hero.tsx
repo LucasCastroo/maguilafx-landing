@@ -160,7 +160,7 @@ export function Hero() {
             <RevealLine delay={BASE_DELAY + 0.08}>Momentos que</RevealLine>
             <RevealLine
               delay={BASE_DELAY + 0.18}
-              className="bg-gradient-to-t from-maguilaRed via-[#FF4D1A] to-[#FF9A3C] bg-clip-text text-transparent drop-shadow-[0_6px_32px_rgba(255,42,42,0.45)]"
+              className="text-maguilaRed drop-shadow-[0_6px_32px_rgba(255,42,42,0.45)]"
             >
               explodem
             </RevealLine>
