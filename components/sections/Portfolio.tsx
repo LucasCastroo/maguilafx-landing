@@ -21,9 +21,10 @@ function useIsDesktop() {
 
 function GalleryItem({ item, index }: { item: (typeof portfolio)[number]; index: number }) {
   return (
-    <figure className="group relative w-[82vw] shrink-0 snap-start md:w-[46vw] lg:w-auto">
-      {/* No desktop a altura é baseada em vh para caber junto com o título na tela fixa */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-coal md:aspect-[3/4] lg:h-[44vh] lg:w-auto">
+    // No desktop a largura da figura é fixa (33vh = 44vh × 3/4) para a legenda
+    // não alargar o item e manter o espaçamento uniforme entre as imagens
+    <figure className="group relative w-[82vw] shrink-0 snap-start md:w-[46vw] lg:w-[33vh]">
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-coal md:aspect-[3/4] lg:h-[44vh]">
         <Image
           src={item.src}
           alt={item.alt}
@@ -130,7 +131,7 @@ function DesktopGallery() {
             {/* CTA final da galeria */}
             <a
               href="#contato"
-              className="group flex h-[44vh] w-[24vw] shrink-0 items-center justify-center self-start border border-bone/15 transition-colors duration-500 hover:border-maguilaRed hover:bg-maguilaRed/5"
+              className="group flex h-[44vh] w-[33vh] shrink-0 items-center justify-center self-start border border-bone/15 transition-colors duration-500 hover:border-maguilaRed hover:bg-maguilaRed/5"
             >
               <div className="text-center">
                 <p className="font-display text-3xl uppercase leading-tight text-bone">

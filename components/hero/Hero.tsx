@@ -3,7 +3,13 @@
 import { useRef } from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 
 const EmberCanvas = dynamic(() => import("./EmberCanvas"), { ssr: false });
 
@@ -44,6 +50,8 @@ function RevealLine({
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const pointerRef = useRef({ x: 0, y: 0 });
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -54,10 +62,30 @@ export function Hero() {
   const contentY = useTransform(scrollYProgress, [0, 0.7], ["0%", "-24%"]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
 
+  // Parallax de mouse no fundo (profundidade cinematográfica)
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springX = useSpring(mouseX, { stiffness: 50, damping: 18 });
+  const springY = useSpring(mouseY, { stiffness: 50, damping: 18 });
+  const parallaxX = useTransform(springX, (v) => v * -18);
+  const parallaxY = useTransform(springY, (v) => v * -12);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+    mouseX.set(nx);
+    mouseY.set(ny);
+    pointerRef.current.x = nx;
+    pointerRef.current.y = -ny;
+  };
+
   return (
     <section
       ref={ref}
       id="inicio"
+      onMouseMove={handleMouseMove}
       className="relative flex min-h-[100svh] items-end overflow-hidden bg-ink"
     >
       {/* Mídia de fundo — vídeo quando disponível, foto enquanto isso */}
@@ -65,41 +93,52 @@ export function Hero() {
         style={{ y: mediaY, scale: mediaScale }}
         className="absolute inset-0"
       >
-        {HERO_VIDEO_SRC ? (
-          <video
-            src={HERO_VIDEO_SRC}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <motion.div
-            initial={{ scale: 1.15 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 2.4, delay: 1.1, ease: EASE }}
-            className="h-full w-full"
-          >
-            <Image
-              src="/images/background/background-1.png"
-              alt="Show com queima de fogos MaguilaFX"
-              fill
-              priority
-              className="object-cover brightness-[0.42] saturate-[1.1]"
-              sizes="100vw"
+        <motion.div
+          style={{ x: parallaxX, y: parallaxY }}
+          className="absolute inset-[-2.5%]"
+        >
+          {HERO_VIDEO_SRC ? (
+            <video
+              src={HERO_VIDEO_SRC}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="h-full w-full object-cover"
             />
-          </motion.div>
-        )}
+          ) : (
+            <motion.div
+              initial={{ scale: 1.15 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 2.4, delay: 1.1, ease: EASE }}
+              className="h-full w-full"
+            >
+              <Image
+                src="/images/background/background-1.png"
+                alt="Show com queima de fogos MaguilaFX"
+                fill
+                priority
+                className="object-cover brightness-[0.42] saturate-[1.1]"
+                sizes="100vw"
+              />
+            </motion.div>
+          )}
+        </motion.div>
       </motion.div>
 
       {/* Vinheta e leitura de texto */}
       <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-ink/60" />
       <div className="absolute inset-0 bg-gradient-to-r from-ink/70 via-transparent to-transparent" />
 
-      {/* Partículas Three.js */}
+      {/* Brilho quente de "palco" pulsando no rodapé da cena */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-[45vh] animate-pulse-soft bg-[radial-gradient(62%_100%_at_50%_100%,rgba(255,84,20,0.2),transparent_70%)]"
+      />
+
+      {/* Partículas Three.js: brasas + explosões de fogos */}
       <div className="absolute inset-0 motion-reduce:hidden">
-        <EmberCanvas />
+        <EmberCanvas pointer={pointerRef.current} />
       </div>
 
       {/* Conteúdo */}
@@ -116,13 +155,31 @@ export function Hero() {
           Efeitos pirotécnicos &amp; especiais
         </motion.p>
 
-        <h1 className="display-title text-[clamp(2.5rem,6.2vw,6rem)]">
-          <RevealLine delay={BASE_DELAY + 0.08}>Momentos que</RevealLine>
-          <RevealLine delay={BASE_DELAY + 0.18} className="text-maguilaRed">
-            explodem
-          </RevealLine>
-          <RevealLine delay={BASE_DELAY + 0.28}>na memória.</RevealLine>
-        </h1>
+        <div className="relative overflow-hidden">
+          <h1 className="display-title text-[clamp(2.75rem,7.4vw,7.5rem)]">
+            <RevealLine delay={BASE_DELAY + 0.08}>Momentos que</RevealLine>
+            <RevealLine
+              delay={BASE_DELAY + 0.18}
+              className="bg-gradient-to-t from-maguilaRed via-[#FF4D1A] to-[#FF9A3C] bg-clip-text text-transparent drop-shadow-[0_6px_32px_rgba(255,42,42,0.45)]"
+            >
+              explodem
+            </RevealLine>
+            <RevealLine delay={BASE_DELAY + 0.28}>na memória.</RevealLine>
+          </h1>
+
+          {/* Varredura de luz única após a entrada do título */}
+          <motion.div
+            aria-hidden
+            initial={{ x: "-140%", opacity: 0 }}
+            animate={{ x: "440%", opacity: [0, 1, 0] }}
+            transition={{
+              delay: BASE_DELAY + 1.25,
+              duration: 1.4,
+              ease: "easeInOut",
+            }}
+            className="pointer-events-none absolute inset-y-0 w-1/4 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent mix-blend-screen"
+          />
+        </div>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
