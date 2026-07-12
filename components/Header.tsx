@@ -1,114 +1,152 @@
-// components/Header.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-
-const navItems = [
-  { label: "Início", href: "#inicio" },
-  { label: "Equipamentos", href: "#equipamentos" },
-  { label: "Portfólio", href: "#portfolio" },
-  { label: "Sobre", href: "#sobre" },
-  { label: "Contato", href: "#contato" },
-];
+import { navItems, WHATSAPP_URL, INSTAGRAM_URL } from "@/lib/data";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", onScroll);
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    document.documentElement.classList.toggle("lenis-stopped", open);
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
-    <header
-      className={`
-        fixed inset-x-0 top-0 z-50
-        transition-all
-        ${scrolled ? "bg-black/80 backdrop-blur-md border-b border-white/10" : "bg-transparent"}
-      `}
-    >
-      <div className="page-container flex h-16 items-center justify-between">
-        {/* Logo + nome */}
-        <Link href="#inicio" className="flex items-center gap-2">
-          <div className="relative h-9 w-9">
-            <Image
-              src="/images/logos/logo-mini-light.png"
-              alt="MaguilaFX"
-              fill
-              className="object-contain"
-              priority
-              sizes="36px"
+    <>
+      <motion.header
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 1.6, ease: [0.22, 1, 0.36, 1] }}
+        className={`fixed inset-x-0 top-0 z-[100] transition-all duration-500 ${
+          scrolled && !open
+            ? "border-b border-bone/10 bg-ink/80 backdrop-blur-lg"
+            : "border-b border-transparent bg-transparent"
+        }`}
+      >
+        <div className="page-container flex h-16 items-center justify-between md:h-20">
+          <a href="#inicio" className="flex items-center gap-3" aria-label="MaguilaFX — início">
+            <div className="relative h-8 w-8 md:h-9 md:w-9">
+              <Image
+                src="/images/logos/logo-mini-light.png"
+                alt=""
+                fill
+                className="object-contain"
+                priority
+                sizes="36px"
+              />
+            </div>
+            <span className="font-display text-lg uppercase tracking-[0.08em] text-bone">
+              Maguila<span className="text-maguilaRed">FX</span>
+            </span>
+          </a>
+
+          <nav className="hidden items-center gap-8 md:flex">
+            {navItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="group relative text-[11px] font-semibold uppercase tracking-micro text-bone/60 transition-colors hover:text-bone"
+              >
+                {item.label}
+                <span className="absolute -bottom-1 left-0 h-px w-0 bg-maguilaRed transition-all duration-300 group-hover:w-full" />
+              </a>
+            ))}
+            <a href="#contato" className="btn-primary !px-6 !py-3">
+              <span>Orçamento</span>
+            </a>
+          </nav>
+
+          {/* Hamburguer mobile */}
+          <button
+            type="button"
+            aria-label={open ? "Fechar menu" : "Abrir menu"}
+            onClick={() => setOpen((v) => !v)}
+            className="relative z-[110] flex h-11 w-11 flex-col items-center justify-center gap-[6px] md:hidden"
+          >
+            <span
+              className={`block h-[2px] w-6 bg-bone transition-all duration-300 ${
+                open ? "translate-y-[8px] rotate-45" : ""
+              }`}
             />
-          </div>
-          <span className="text-sm font-semibold tracking-[0.3em] uppercase text-white/80">
-            Maguila<span className="text-maguilaRed">FX</span>
-          </span>
-        </Link>
-
-        {/* Navegação desktop */}
-        <nav className="hidden items-center gap-6 text-xs font-medium uppercase tracking-[0.25em] text-white/60 md:flex">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="transition hover:text-white"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Botão hamburguer mobile */}
-        <button
-          type="button"
-          aria-label="Abrir menu"
-          onClick={() => setOpen((prev) => !prev)}
-          className="group relative flex h-10 w-10 flex-col items-center justify-center gap-[5px] rounded-full border border-white/20 bg-black/60 text-white transition-colors hover:border-maguilaRed/50 md:hidden"
-        >
-          <span
-            className={`block h-[2px] w-5 rounded-full bg-white transition-all duration-300 ${open ? "translate-y-[7px] rotate-45" : ""
+            <span
+              className={`block h-[2px] w-6 bg-bone transition-all duration-300 ${
+                open ? "opacity-0" : ""
               }`}
-          />
-          <span
-            className={`block h-[2px] w-5 rounded-full bg-white transition-all duration-300 ${open ? "opacity-0" : "opacity-100"
+            />
+            <span
+              className={`block h-[2px] w-6 bg-bone transition-all duration-300 ${
+                open ? "-translate-y-[8px] -rotate-45" : ""
               }`}
-          />
-          <span
-            className={`block h-[2px] w-5 rounded-full bg-white transition-all duration-300 ${open ? "-translate-y-[7px] -rotate-45" : ""
-              }`}
-          />
-        </button>
-      </div>
+            />
+          </button>
+        </div>
+      </motion.header>
 
-      {/* Menu mobile */}
+      {/* Menu mobile fullscreen */}
       <AnimatePresence>
         {open && (
-          <motion.nav
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            className="border-t border-white/10 bg-black/95 py-4 md:hidden"
+          <motion.div
+            initial={{ clipPath: "inset(0 0 100% 0)" }}
+            animate={{ clipPath: "inset(0 0 0% 0)" }}
+            exit={{ clipPath: "inset(0 0 100% 0)" }}
+            transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-[95] flex flex-col justify-between bg-ink pb-10 pt-28 md:hidden"
           >
-            <div className="page-container flex flex-col gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-white/70">
-              {navItems.map((item) => (
-                <Link
+            <nav className="page-container flex flex-col">
+              {navItems.map((item, i) => (
+                <motion.a
                   key={item.href}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="py-1 transition hover:text-white"
+                  initial={{ y: 40, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.15 + i * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  className="group flex items-baseline gap-4 border-b border-bone/10 py-4"
                 >
-                  {item.label}
-                </Link>
+                  <span className="text-[10px] font-semibold tracking-micro text-maguilaRed">
+                    0{i + 1}
+                  </span>
+                  <span className="font-display text-4xl uppercase leading-none text-bone transition-colors group-hover:text-maguilaRed">
+                    {item.label}
+                  </span>
+                </motion.a>
               ))}
-            </div>
-          </motion.nav>
+            </nav>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="page-container flex flex-col gap-4"
+            >
+              <div className="flex gap-8 text-[11px] font-semibold uppercase tracking-micro text-bone/50">
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-bone">
+                  WhatsApp
+                </a>
+                <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-bone">
+                  Instagram
+                </a>
+              </div>
+              <p className="text-[11px] uppercase tracking-micro text-bone/30">
+                Palmas, Tocantins — Brasil
+              </p>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

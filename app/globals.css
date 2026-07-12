@@ -4,124 +4,185 @@
 
 :root {
   color-scheme: dark;
-  /* Valor padrão transparente */
-  --section-bg-image: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7");
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 html,
 body {
-  @apply bg-black text-white font-sans antialiased;
-  scroll-behavior: smooth;
-  overflow-x: hidden;
+  @apply bg-ink text-bone font-sans antialiased;
+  overflow-x: clip;
 }
 
-/* Container padrão */
-.page-container {
-  @apply mx-auto w-full max-w-6xl px-4 md:px-6;
-}
-
-/* Background padrão */
-.section-bg {
-  position: relative;
+::selection {
+  background: #ff2a2a;
   color: #fff;
-  background-image: var(--section-bg-image);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  width: 100%;
 }
 
-/* Camada de escurecimento e glow */
-.section-bg::before {
+/* Scrollbar discreta */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #070708;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2a2e;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff2a2a;
+}
+
+/* Container editorial largo */
+.page-container {
+  @apply mx-auto w-full max-w-[92rem] px-5 md:px-10 lg:px-14;
+}
+
+/* Rótulo micro em caixa alta usado em todas as seções */
+.kicker {
+  @apply flex items-center gap-3 text-[11px] font-semibold uppercase tracking-micro text-bone/50;
+}
+
+.kicker::before {
   content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.14), transparent 55%),
-    radial-gradient(circle at bottom right, rgba(255, 42, 42, 0.45), transparent 55%),
-    rgba(5, 5, 9, 0.85);
-  mix-blend-mode: screen;
-  backdrop-filter: blur(6px);
-  pointer-events: none;
+  @apply block h-px w-10 bg-maguilaRed;
 }
 
-/* Conteúdo acima do overlay */
-.section-inner {
-  position: relative;
-  z-index: 2;
+/* Título display gigante */
+.display-title {
+  @apply font-display uppercase leading-[0.92] tracking-[0.01em] text-bone;
 }
 
-/* Botões padrão */
+/* Texto vazado (outline) para marquees e fundos */
+.text-stroke {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(244, 241, 234, 0.28);
+}
+
+.text-stroke-red {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 42, 42, 0.65);
+}
+
+/* Botões */
 .btn-primary {
-  @apply inline-flex items-center justify-center rounded-full bg-maguilaRed px-7 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-white shadow-glow-red transition hover:translate-y-0.5 hover:bg-red-500 hover:shadow-lg;
+  @apply relative inline-flex items-center justify-center gap-3 overflow-hidden bg-maguilaRed px-8 py-4 text-xs font-bold uppercase tracking-micro text-white transition-colors duration-300;
 }
 
-.btn-outline {
-  @apply inline-flex items-center justify-center rounded-full border border-white/40 bg-white/5 px-7 py-3 text-sm font-semibold uppercase tracking-[0.25em] text-white/90 transition hover:bg-white/10;
+.btn-primary::after {
+  content: "";
+  @apply absolute inset-0 -z-0 translate-y-full bg-bone transition-transform duration-300 ease-out;
 }
 
-/* Efeito de hover Fogo para Cards */
-.hover-fire-card {
-  @apply transition-all duration-500 border border-white/5;
+.btn-primary:hover::after {
+  @apply translate-y-0;
 }
 
-.hover-fire-card:hover {
-  @apply border-orange-500/50 -translate-y-2 bg-black/80;
-  box-shadow:
-    0 20px 40px -10px rgba(255, 69, 0, 0.5),
-    0 0 20px rgba(220, 38, 38, 0.4),
-    inset 0 0 20px rgba(255, 69, 0, 0.1);
+.btn-primary:hover {
+  @apply text-ink;
 }
 
-/* Símbolo de fogo gigante à direita (Apenas Desktop) - Reutilizável */
-@media (min-width: 1024px) {
-  .section-with-fire::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: -100px;
-    width: 1500px;
-    background-image: url("/images/logos/simbolo-fire.png");
-    background-repeat: no-repeat;
-    background-position: center right;
-    background-size: contain;
-    opacity: 0.45;
-    pointer-events: none;
-    z-index: 0;
+.btn-primary > * {
+  @apply relative z-10;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center gap-3 border border-bone/25 px-8 py-4 text-xs font-bold uppercase tracking-micro text-bone/90 transition-all duration-300 hover:border-bone hover:bg-bone hover:text-ink;
+}
+
+/* Inputs minimalistas (sem card) */
+.field-label {
+  @apply mb-2 block text-[10px] font-semibold uppercase tracking-micro text-bone/45;
+}
+
+.field-input {
+  @apply w-full border-0 border-b border-bone/20 bg-transparent px-0 py-3 text-base text-bone outline-none transition-colors duration-300 placeholder:text-bone/25 focus:border-maguilaRed;
+  border-radius: 0;
+}
+
+textarea.field-input {
+  resize: none;
+}
+
+.field-error {
+  @apply mt-1.5 text-[11px] uppercase tracking-widest text-maguilaRed;
+}
+
+/* Grão de filme por cima de tudo (textura cinematográfica) */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -100%;
+  z-index: 90;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  opacity: 0.05;
+  animation: grain-shift 0.9s steps(4) infinite;
+}
+
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2%, 3%); }
+  50% { transform: translate(3%, -2%); }
+  75% { transform: translate(-3%, -3%); }
+  100% { transform: translate(2%, 2%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain::after {
+    animation: none;
   }
 }
 
 /* =========================================
-   React DatePicker Customization (MaguilaFX Theme)
+   React DatePicker (tema MaguilaFX)
    ========================================= */
 .maguila-datepicker {
-  background-color: #050509 !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background-color: #0d0d0f !important;
+  border: 1px solid rgba(244, 241, 234, 0.15) !important;
   font-family: inherit !important;
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 42, 42, 0.2) !important;
-  border-radius: 16px !important;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.8) !important;
+  border-radius: 0 !important;
   padding: 10px !important;
   overflow: hidden;
-  color: #fff !important;
+  color: #f4f1ea !important;
 }
 
 .maguila-datepicker .react-datepicker__header {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 10px 10px 0 0 !important;
+  background-color: rgba(244, 241, 234, 0.05) !important;
+  border-bottom: 1px solid rgba(244, 241, 234, 0.1) !important;
+  border-radius: 0 !important;
 }
 
 .maguila-datepicker .react-datepicker__current-month,
 .maguila-datepicker .react-datepicker__day-name {
-  color: #fff !important;
+  color: #f4f1ea !important;
 }
 
 .maguila-datepicker .react-datepicker__day {
-  color: rgba(255, 255, 255, 0.8) !important;
+  color: rgba(244, 241, 234, 0.8) !important;
   transition: all 0.2s ease !important;
-  border-radius: 8px !important;
+  border-radius: 0 !important;
 }
 
 .maguila-datepicker .react-datepicker__day:hover {
@@ -131,20 +192,18 @@ body {
 
 .maguila-datepicker .react-datepicker__day--selected,
 .maguila-datepicker .react-datepicker__day--keyboard-selected {
-  background-color: #FF2A2A !important;
+  background-color: #ff2a2a !important;
   color: #fff !important;
-  box-shadow: 0 0 15px rgba(255, 42, 42, 0.6);
   font-weight: bold;
 }
 
 .maguila-datepicker .react-datepicker__day--disabled {
-  color: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(244, 241, 234, 0.1) !important;
   pointer-events: none;
 }
 
-/* Navegação customizada (Setas) */
 .maguila-datepicker .react-datepicker__navigation-icon::before {
-  border-color: #fff !important;
+  border-color: #f4f1ea !important;
   border-width: 2px 2px 0 0 !important;
 }
 
@@ -152,33 +211,6 @@ body {
   display: none !important;
 }
 
-/* Remover focus outline feio */
 .react-datepicker__day:focus {
   outline: none !important;
-}
-
-/* Customização do Calendário (Date Picker) */
-input[type="date"] {
-  color-scheme: dark;
-  accent-color: #FF2A2A;
-  /* MaguilaRed para seleção */
-}
-
-/* Ícone do calendário */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-  opacity: 0.6;
-  padding: 5px;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  /* Garante que o ícone padrão (branco em color-scheme dark) permaneça visível */
-  filter: invert(0);
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
-  transform: scale(1.1);
-  background-color: rgba(255, 42, 42, 0.1);
-  /* Filtro preciso para converter branco/preto em MaguilaRed (#FF2A2A) */
-  filter: invert(24%) sepia(93%) saturate(7456%) hue-rotate(356deg) brightness(97%) contrast(117%);
 }

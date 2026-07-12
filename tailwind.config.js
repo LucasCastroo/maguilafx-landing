@@ -7,22 +7,41 @@ const config = {
   theme: {
     extend: {
       colors: {
+        ink: "#070708",
+        coal: "#0D0D0F",
+        bone: "#F4F1EA",
         maguilaDark: "#050509",
         maguilaRed: "#FF2A2A",
+        ember: "#FF7A1A",
         maguilaGold: "#FFC857",
       },
       fontFamily: {
-        sans: [
-          "system-ui",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "Segoe UI",
-          "sans-serif",
-        ],
+        sans: ["var(--font-sans)", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+        display: ["var(--font-display)", "Impact", "Haettenschweiler", "sans-serif"],
       },
-      boxShadow: {
-        glow: "0 0 40px rgba(255, 255, 255, 0.45)",
-        "glow-red": "0 0 40px rgba(255, 42, 42, 0.7)",
+      letterSpacing: {
+        micro: "0.32em",
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        "scroll-cue": {
+          "0%": { transform: "scaleY(0)", transformOrigin: "top" },
+          "45%": { transform: "scaleY(1)", transformOrigin: "top" },
+          "55%": { transform: "scaleY(1)", transformOrigin: "bottom" },
+          "100%": { transform: "scaleY(0)", transformOrigin: "bottom" },
+        },
+        "pulse-soft": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.35" },
+        },
+      },
+      animation: {
+        marquee: "marquee 40s linear infinite",
+        "scroll-cue": "scroll-cue 2.2s ease-in-out infinite",
+        "pulse-soft": "pulse-soft 2.4s ease-in-out infinite",
       },
     },
   },
