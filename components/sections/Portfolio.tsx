@@ -1,30 +1,39 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { portfolio } from "@/lib/data";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-function useIsDesktop() {
-  const [isDesktop, setIsDesktop] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const update = () => setIsDesktop(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
-  return isDesktop;
-}
+// Evita o aviso do React ao renderizar no servidor
+const useIsoLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-function GalleryItem({ item, index }: { item: (typeof portfolio)[number]; index: number }) {
+/**
+ * Alinha a borda esquerda do trilho com o `.page-container` (max-w-92rem
+ * centrado + px-14). Sem isso, em telas acima de 1472px o título ficava
+ * recuado e o primeiro card colado na borda.
+ *
+ * Usa `%` e não `vw` de propósito: `100vw` inclui a barra de rolagem, então
+ * daria ~8px de diferença do container em navegadores com scrollbar clássica.
+ */
+const TRACK_PADDING = "pl-[max(3.5rem,calc((100%-92rem)/2+3.5rem))]";
+
+function GalleryItem({
+  item,
+  index,
+}: {
+  item: (typeof portfolio)[number];
+  index: number;
+}) {
   return (
-    // No desktop a largura da figura é fixa (33vh = 44vh × 3/4) para a legenda
-    // não alargar o item e manter o espaçamento uniforme entre as imagens
-    <figure className="group relative w-[82vw] shrink-0 snap-start md:w-[46vw] lg:w-[33vh]">
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-coal md:aspect-[3/4] lg:h-[44vh]">
+    // No desktop a largura é fixa para a legenda não alargar o item e manter o
+    // espaçamento uniforme. O `min()` evita que o card encolha demais em telas
+    // largas e baixas, onde 33vh virava ~200px.
+    <figure className="group relative w-[82vw] shrink-0 snap-start md:w-[46vw] lg:w-[min(33vh,21rem)]">
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-coal md:aspect-[3/4] lg:h-[min(44vh,28rem)]">
         <Image
           src={item.src}
           alt={item.alt}
@@ -33,16 +42,20 @@ function GalleryItem({ item, index }: { item: (typeof portfolio)[number]; index:
           sizes="(min-width: 1024px) 38vw, 82vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/50 via-transparent to-transparent opacity-60" />
-        <span className="absolute left-5 top-5 text-[10px] font-semibold uppercase tracking-micro text-bone/80">
+        {/* Faísca no hover — reforça o tema sem custo de canvas */}
+        <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-[radial-gradient(80%_100%_at_50%_100%,rgba(255,90,20,0.45),transparent_70%)] mix-blend-screen" />
+        </div>
+        <span className="absolute left-5 top-5 text-[10px] font-semibold uppercase tracking-micro text-bone/90">
           {item.category}
         </span>
       </div>
       <figcaption className="mt-4 flex items-baseline justify-between gap-4">
         <div>
-          <h3 className="font-display text-xl uppercase text-bone md:text-2xl">
+          <h3 className="font-display text-xl uppercase text-bone transition-colors duration-300 group-hover:text-maguilaRed md:text-2xl">
             {item.title}
           </h3>
-          <p className="mt-1 text-sm text-bone/50">{item.description}</p>
+          <p className="mt-1 text-sm text-bone/60">{item.description}</p>
         </div>
         <span className="text-[11px] font-semibold tracking-micro text-maguilaRed">
           0{index + 1}
@@ -52,7 +65,7 @@ function GalleryItem({ item, index }: { item: (typeof portfolio)[number]; index:
   );
 }
 
-function Header() {
+function GalleryHeader() {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -68,7 +81,7 @@ function Header() {
           <span className="text-maguilaRed">de verdade.</span>
         </h2>
       </div>
-      <p className="max-w-sm text-sm leading-relaxed text-bone/50 md:text-right">
+      <p className="max-w-sm text-sm leading-relaxed text-bone/60 md:text-right">
         Registros reais de produções que contaram com o time MaguilaFX —
         de cerimônias íntimas a arenas lotadas.
       </p>
@@ -78,17 +91,19 @@ function Header() {
 
 function MobileGallery() {
   return (
-    <section id="portfolio" className="bg-ink py-24">
-      <Header />
-      <div className="mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="bg-ink py-24 lg:hidden">
+      <GalleryHeader />
+      {/* scroll-pl-5: sem isso o snap alinha pelo border-box e come o px-5,
+          deixando o primeiro card colado na borda da tela */}
+      <div className="mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-pl-5 px-5 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {portfolio.map((item, i) => (
           <GalleryItem key={item.src} item={item} index={i} />
         ))}
       </div>
-      <p className="page-container mt-2 text-[10px] font-semibold uppercase tracking-micro text-bone/30">
+      <p className="page-container mt-2 text-[10px] font-semibold uppercase tracking-micro text-bone/55">
         Arraste para o lado →
       </p>
-    </section>
+    </div>
   );
 }
 
@@ -97,10 +112,15 @@ function DesktopGallery() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [range, setRange] = useState(0);
 
-  useEffect(() => {
+  useIsoLayoutEffect(() => {
     const measure = () => {
-      if (!trackRef.current) return;
-      setRange(Math.max(0, trackRef.current.scrollWidth - window.innerWidth));
+      const track = trackRef.current;
+      // Escondido no mobile via CSS: scrollWidth é 0 e não há o que medir.
+      if (!track || track.offsetParent === null) {
+        setRange(0);
+        return;
+      }
+      setRange(Math.max(0, track.scrollWidth - window.innerWidth));
     };
     measure();
     window.addEventListener("resize", measure);
@@ -111,18 +131,18 @@ function DesktopGallery() {
   const x = useTransform(scrollYProgress, [0, 1], [0, -range]);
 
   return (
-    <section id="portfolio" className="bg-ink">
+    <div className="hidden bg-ink lg:block">
       <div
         ref={containerRef}
-        style={{ height: range ? `calc(100vh + ${range}px)` : "auto" }}
+        style={{ height: range ? `calc(100vh + ${range}px)` : undefined }}
         className="relative"
       >
         <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden py-10">
-          <Header />
+          <GalleryHeader />
           <motion.div
             ref={trackRef}
             style={{ x }}
-            className="mt-10 flex w-max gap-7 pl-14 pr-24 will-change-transform"
+            className={`mt-10 flex w-max gap-7 pr-24 will-change-transform ${TRACK_PADDING}`}
           >
             {portfolio.map((item, i) => (
               <GalleryItem key={item.src} item={item} index={i} />
@@ -131,7 +151,7 @@ function DesktopGallery() {
             {/* CTA final da galeria */}
             <a
               href="#contato"
-              className="group flex h-[44vh] w-[33vh] shrink-0 items-center justify-center self-start border border-bone/15 transition-colors duration-500 hover:border-maguilaRed hover:bg-maguilaRed/5"
+              className="group flex h-[min(44vh,28rem)] w-[min(33vh,21rem)] shrink-0 items-center justify-center self-start border border-bone/20 transition-colors duration-500 hover:border-maguilaRed hover:bg-maguilaRed/5"
             >
               <div className="text-center">
                 <p className="font-display text-3xl uppercase leading-tight text-bone">
@@ -139,7 +159,7 @@ function DesktopGallery() {
                   <br />
                   <span className="text-maguilaRed">é o próximo?</span>
                 </p>
-                <p className="mt-4 text-[11px] font-semibold uppercase tracking-micro text-bone/50 transition-colors group-hover:text-bone">
+                <p className="mt-4 text-[11px] font-semibold uppercase tracking-micro text-bone/60 transition-colors group-hover:text-bone">
                   Fale com a gente →
                 </p>
               </div>
@@ -148,7 +168,7 @@ function DesktopGallery() {
 
           {/* Barra de progresso */}
           <div className="page-container mt-10">
-            <div className="h-px w-full bg-bone/10">
+            <div className="h-px w-full bg-bone/15">
               <motion.div
                 style={{ scaleX: scrollYProgress }}
                 className="h-full w-full origin-left bg-maguilaRed"
@@ -157,11 +177,18 @@ function DesktopGallery() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
 
 export function Portfolio() {
-  const isDesktop = useIsDesktop();
-  return isDesktop ? <DesktopGallery /> : <MobileGallery />;
+  // Antes isto era decidido em JS (useIsDesktop), o que fazia o desktop montar
+  // a galeria mobile, desmontar e remontar a horizontal — com salto visível.
+  // Agora as duas versões vêm do servidor e quem escolhe é o CSS.
+  return (
+    <section id="portfolio">
+      <MobileGallery />
+      <DesktopGallery />
+    </section>
+  );
 }
