@@ -1,15 +1,16 @@
 "use client";
 
+import { useState } from "react";
+import dynamic from "next/dynamic";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import DatePicker, { registerLocale } from "react-datepicker";
-import { ptBR } from "date-fns/locale/pt-BR";
-import "react-datepicker/dist/react-datepicker.css";
 import { WHATSAPP_URL, INSTAGRAM_URL } from "@/lib/data";
 
-registerLocale("pt-BR", ptBR);
+const EventDatePicker = dynamic(() => import("./EventDatePicker"), {
+  ssr: false,
+});
 
 const contatoSchema = z.object({
   nome: z.string().min(2, "Nome obrigatório"),
@@ -25,6 +26,7 @@ type ContatoFormData = z.infer<typeof contatoSchema>;
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function Contact() {
+  const [datePickerReady, setDatePickerReady] = useState(false);
   const {
     register,
     handleSubmit,
@@ -89,7 +91,7 @@ export function Contact() {
             className="flex flex-col justify-between gap-10"
           >
             <div className="space-y-8">
-              <p className="max-w-md text-base leading-relaxed text-bone/60">
+              <p className="max-w-md text-base leading-relaxed text-bone/70">
                 Conte o que você está planejando. Nosso time analisa o evento e
                 responde com uma proposta de efeitos sob medida — direto no seu
                 WhatsApp.
@@ -129,7 +131,7 @@ export function Contact() {
               </div>
             </div>
 
-            <p className="text-[11px] leading-relaxed text-bone/30">
+            <p className="text-[11px] leading-relaxed text-bone/55">
               *Consulte condições de deslocamento e disponibilidade de datas.
             </p>
           </motion.div>
@@ -199,21 +201,29 @@ export function Contact() {
                 <Controller
                   control={control}
                   name="data"
-                  render={({ field }) => (
-                    <DatePicker
-                      selected={field.value ? new Date(field.value) : null}
-                      onChange={(date: Date | null) =>
-                        field.onChange(date ? date.toISOString() : "")
-                      }
-                      dateFormat="dd/MM/yyyy"
-                      locale="pt-BR"
-                      minDate={new Date()}
-                      placeholderText="__/__/____"
-                      className="field-input"
-                      calendarClassName="maguila-datepicker"
-                      showPopperArrow={false}
-                    />
-                  )}
+                  render={({ field }) =>
+                    // O calendário só é baixado quando o campo é tocado.
+                    datePickerReady ? (
+                      <EventDatePicker
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        readOnly
+                        className="field-input cursor-pointer"
+                        placeholder="__/__/____"
+                        value={
+                          field.value
+                            ? new Date(field.value).toLocaleDateString("pt-BR")
+                            : ""
+                        }
+                        onFocus={() => setDatePickerReady(true)}
+                        onClick={() => setDatePickerReady(true)}
+                      />
+                    )
+                  }
                 />
               </div>
             </div>
@@ -240,7 +250,7 @@ export function Contact() {
                 <span>{isSubmitting ? "Enviando..." : "Enviar pelo WhatsApp"}</span>
                 <span aria-hidden>→</span>
               </button>
-              <p className="mt-3 text-center text-[11px] text-bone/30">
+              <p className="mt-3 text-center text-[11px] text-bone/55">
                 Ao enviar, você autoriza contato via WhatsApp para continuidade
                 do atendimento.
               </p>
