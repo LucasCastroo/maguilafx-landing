@@ -134,5 +134,7 @@ export const navItems = [
   { label: "Contato", href: "#contato" },
 ];
 
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://maguilafx-landing.vercel.app";
 export const WHATSAPP_URL = "https://wa.me/556392252302";
 export const INSTAGRAM_URL = "https://instagram.com/maguilafx";
