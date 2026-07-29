@@ -53,12 +53,17 @@ export function Header() {
             </span>
           </a>
 
-          <nav className="hidden items-center gap-8 md:flex">
+          {/*
+            O menu inteiro (5 itens com tracking-micro + botão) precisa de
+            ~900px. Em `md` (768px) ele estourava a viewport e o botão
+            "Orçamento" saía da tela — por isso só entra a partir de `lg`.
+          */}
+          <nav className="hidden items-center gap-6 lg:flex xl:gap-8">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className="group relative text-[11px] font-semibold uppercase tracking-micro text-bone/60 transition-colors hover:text-bone"
+                className="group relative text-[11px] font-semibold uppercase tracking-micro text-bone/70 transition-colors hover:text-bone"
               >
                 {item.label}
                 <span className="absolute -bottom-1 left-0 h-px w-0 bg-maguilaRed transition-all duration-300 group-hover:w-full" />
@@ -74,7 +79,7 @@ export function Header() {
             type="button"
             aria-label={open ? "Fechar menu" : "Abrir menu"}
             onClick={() => setOpen((v) => !v)}
-            className="relative z-[110] flex h-11 w-11 flex-col items-center justify-center gap-[6px] md:hidden"
+            className="relative z-[110] flex h-11 w-11 flex-col items-center justify-center gap-[6px] lg:hidden"
           >
             <span
               className={`block h-[2px] w-6 bg-bone transition-all duration-300 ${
@@ -103,7 +108,7 @@ export function Header() {
             animate={{ clipPath: "inset(0 0 0% 0)" }}
             exit={{ clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 z-[95] flex flex-col justify-between bg-ink pb-10 pt-28 md:hidden"
+            className="fixed inset-0 z-[95] flex flex-col justify-between bg-ink pb-10 pt-28 lg:hidden"
           >
             <nav className="page-container flex flex-col">
               {navItems.map((item, i) => (
@@ -140,7 +145,7 @@ export function Header() {
                   Instagram
                 </a>
               </div>
-              <p className="text-[11px] uppercase tracking-micro text-bone/30">
+              <p className="text-[11px] uppercase tracking-micro text-bone/55">
                 Palmas, Tocantins — Brasil
               </p>
             </motion.div>
