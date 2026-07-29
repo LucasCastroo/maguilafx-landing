@@ -2,15 +2,25 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useIntro } from "./IntroProvider";
 
 const DURATION_MS = 1200;
 
 export function Preloader() {
   const [progress, setProgress] = useState(0);
   const [done, setDone] = useState(false);
+  const { finishIntro } = useIntro();
+  const prefersReduced = useReducedMotion();
 
   useEffect(() => {
+    // Quem pediu menos movimento não deve esperar cortina nenhuma.
+    if (prefersReduced) {
+      setDone(true);
+      finishIntro();
+      return;
+    }
+
     document.documentElement.style.overflow = "hidden";
     const start = performance.now();
     let rafId: number;
@@ -24,6 +34,8 @@ export function Preloader() {
         rafId = requestAnimationFrame(tick);
       } else {
         setDone(true);
+        // A hero começa a entrar junto com a subida da cortina.
+        finishIntro();
         document.documentElement.style.overflow = "";
       }
     };
@@ -33,7 +45,7 @@ export function Preloader() {
       cancelAnimationFrame(rafId);
       document.documentElement.style.overflow = "";
     };
-  }, []);
+  }, [finishIntro, prefersReduced]);
 
   return (
     <AnimatePresence>
@@ -60,7 +72,7 @@ export function Preloader() {
           </motion.div>
 
           <div className="absolute bottom-10 left-0 right-0 flex items-end justify-between px-6 md:px-12">
-            <p className="text-[10px] font-semibold uppercase tracking-micro text-bone/40">
+            <p className="text-[10px] font-semibold uppercase tracking-micro text-bone/50">
               Efeitos pirotécnicos &amp; especiais
             </p>
             <p className="font-display text-5xl leading-none text-bone/90 md:text-6xl">
