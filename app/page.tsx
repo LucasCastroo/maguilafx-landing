@@ -7,6 +7,7 @@ import { Stats } from "@/components/sections/Stats";
 import { About } from "@/components/sections/About";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/Footer";
+import { SectionFuse } from "@/components/SectionFuse";
 
 export default function HomePage() {
   return (
@@ -14,10 +15,13 @@ export default function HomePage() {
       <Hero />
       <Marquee />
       <Manifesto />
+      <SectionFuse />
       <Effects />
+      <SectionFuse />
       <Portfolio />
       <Stats />
       <About />
+      <SectionFuse />
       <Contact />
       <Footer />
     </main>

@@ -51,10 +51,22 @@ export function Stats() {
               i === 3 ? "border-t lg:border-t-0" : ""
             }`}
           >
-            <span className="font-display text-5xl leading-none text-maguilaRed md:text-7xl">
+            {/* Ignição: o número "acende" como lâmpada antes de estabilizar */}
+            <motion.span
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: [0, 1, 0.25, 1, 0.6, 1] }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{
+                duration: 0.9,
+                delay: i * 0.1,
+                times: [0, 0.15, 0.28, 0.42, 0.55, 1],
+                ease: "easeOut",
+              }}
+              className="font-display text-5xl leading-none text-maguilaRed [text-shadow:0_0_28px_rgba(255,42,42,0.45)] md:text-7xl"
+            >
               {stat.value}
-            </span>
-            <span className="max-w-[220px] text-xs font-semibold uppercase tracking-widest text-bone/50">
+            </motion.span>
+            <span className="max-w-[220px] text-xs font-semibold uppercase tracking-widest text-bone/65">
               {stat.label}
             </span>
           </motion.div>
