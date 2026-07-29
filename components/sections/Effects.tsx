@@ -28,7 +28,7 @@ export function Effects() {
               <span className="text-maguilaRed">dominamos.</span>
             </h2>
           </div>
-          <p className="max-w-sm text-sm leading-relaxed text-bone/50 md:text-right">
+          <p className="max-w-sm text-sm leading-relaxed text-bone/65 md:text-right">
             Equipamentos próprios, revisados e operados por equipe habilitada.
             Passe o mouse ou toque para explorar cada tecnologia.
           </p>
@@ -49,7 +49,7 @@ export function Effects() {
                   >
                     <span
                       className={`text-[11px] font-semibold tracking-micro transition-colors ${
-                        isActive ? "text-maguilaRed" : "text-bone/30"
+                        isActive ? "text-maguilaRed" : "text-bone/55"
                       }`}
                     >
                       0{i + 1}
@@ -58,7 +58,7 @@ export function Effects() {
                       className={`font-display text-3xl uppercase leading-none transition-all duration-300 md:text-5xl ${
                         isActive
                           ? "translate-x-2 text-bone"
-                          : "text-bone/35 group-hover:text-bone/70"
+                          : "text-bone/45 group-hover:text-bone/75"
                       }`}
                     >
                       {effect.label}
@@ -100,7 +100,7 @@ export function Effects() {
                             {effect.specs.map((spec) => (
                               <li
                                 key={spec}
-                                className="flex items-center gap-3 text-xs uppercase tracking-widest text-bone/50"
+                                className="flex items-center gap-3 text-xs uppercase tracking-widest text-bone/65"
                               >
                                 <span className="h-px w-4 bg-maguilaRed" />
                                 {spec}
@@ -172,7 +172,7 @@ export function Effects() {
                   {active.specs.map((spec) => (
                     <li
                       key={spec}
-                      className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-widest text-bone/50"
+                      className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-widest text-bone/65"
                     >
                       <span className="h-px w-4 bg-maguilaRed" />
                       {spec}

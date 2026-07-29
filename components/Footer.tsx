@@ -11,14 +11,14 @@ export function Footer() {
       <div className="page-container pt-16 md:pt-20">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
-            <p className="max-w-xs text-sm leading-relaxed text-bone/50">
+            <p className="max-w-xs text-sm leading-relaxed text-bone/65">
               Transformando eventos em experiências visuais inesquecíveis com
               pirotecnia e efeitos especiais de alto nível.
             </p>
           </div>
 
           <div>
-            <p className="mb-5 text-[10px] font-semibold uppercase tracking-micro text-bone/40">
+            <p className="mb-5 text-[10px] font-semibold uppercase tracking-micro text-bone/60">
               Navegação
             </p>
             <ul className="space-y-2.5">
@@ -26,7 +26,7 @@ export function Footer() {
                 <li key={item.href}>
                   <a
                     href={item.href}
-                    className="text-sm font-medium uppercase tracking-wider text-bone/70 transition-colors hover:text-maguilaRed"
+                    className="text-sm font-medium uppercase tracking-wider text-bone/75 transition-colors hover:text-maguilaRed"
                   >
                     {item.label}
                   </a>
@@ -36,7 +36,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="mb-5 text-[10px] font-semibold uppercase tracking-micro text-bone/40">
+            <p className="mb-5 text-[10px] font-semibold uppercase tracking-micro text-bone/60">
               Conecte-se
             </p>
             <ul className="space-y-2.5">
@@ -45,7 +45,7 @@ export function Footer() {
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-medium uppercase tracking-wider text-bone/70 transition-colors hover:text-maguilaRed"
+                  className="text-sm font-medium uppercase tracking-wider text-bone/75 transition-colors hover:text-maguilaRed"
                 >
                   WhatsApp
                 </a>
@@ -55,7 +55,7 @@ export function Footer() {
                   href={INSTAGRAM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-medium uppercase tracking-wider text-bone/70 transition-colors hover:text-maguilaRed"
+                  className="text-sm font-medium uppercase tracking-wider text-bone/75 transition-colors hover:text-maguilaRed"
                 >
                   Instagram
                 </a>
@@ -71,14 +71,15 @@ export function Footer() {
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 1.1, ease: EASE }}
           aria-hidden
-          className="mt-16 select-none whitespace-nowrap text-center font-display text-[clamp(3rem,10.5vw,11rem)] leading-[0.8] text-bone/90 md:mt-20"
+          // pb extra: com leading-[0.8] a perna do "g" era cortada pela borda
+          className="mt-16 select-none whitespace-nowrap pb-[0.12em] text-center font-display text-[clamp(3rem,10.5vw,11rem)] leading-[0.8] text-bone/90 md:mt-20"
         >
           Maguila<span className="text-maguilaRed">FX</span>
         </motion.p>
       </div>
 
       <div className="border-t border-bone/10">
-        <div className="page-container flex flex-col items-center justify-between gap-3 py-6 text-[11px] uppercase tracking-widest text-bone/30 md:flex-row">
+        <div className="page-container flex flex-col items-center justify-between gap-3 py-6 text-[11px] uppercase tracking-widest text-bone/55 md:flex-row">
           <p>© {new Date().getFullYear()} MaguilaFX. Todos os direitos reservados.</p>
           <p>Desenvolvido com tecnologia e paixão.</p>
         </div>

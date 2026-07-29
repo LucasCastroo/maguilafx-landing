@@ -111,12 +111,20 @@ body {
 
 /* Inputs minimalistas (sem card) */
 .field-label {
-  @apply mb-2 block text-[10px] font-semibold uppercase tracking-micro text-bone/45;
+  @apply mb-2 block text-[10px] font-semibold uppercase tracking-micro text-bone/60;
 }
 
 .field-input {
-  @apply w-full border-0 border-b border-bone/20 bg-transparent px-0 py-3 text-base text-bone outline-none transition-colors duration-300 placeholder:text-bone/25 focus:border-maguilaRed;
+  @apply w-full border-0 border-b border-bone/30 bg-transparent px-0 py-3 text-base text-bone outline-none transition-colors duration-300 placeholder:text-bone/45 focus:border-maguilaRed;
   border-radius: 0;
+}
+
+/* Foco visível para navegação por teclado (antes só havia :focus de cor) */
+.field-input:focus-visible,
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #ff2a2a;
+  outline-offset: 3px;
 }
 
 textarea.field-input {
@@ -151,6 +159,18 @@ textarea.field-input {
 @media (prefers-reduced-motion: reduce) {
   .grain::after {
     animation: none;
+  }
+
+  /* Mata as animações contínuas do tema (marquee, pulso do palco, cue de
+     scroll). O JS já trata o resto via useReducedMotion. */
+  .animate-marquee,
+  .animate-scroll-cue,
+  .animate-pulse-soft {
+    animation: none !important;
+  }
+
+  html {
+    scroll-behavior: auto;
   }
 }
 

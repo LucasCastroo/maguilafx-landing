@@ -56,7 +56,7 @@ export function About() {
             <p className="text-[11px] font-semibold uppercase tracking-micro text-maguilaGold">
               Certificação Blaster Pirotécnico
             </p>
-            <p className="mt-2 max-w-md text-sm leading-relaxed text-bone/60">
+            <p className="mt-2 max-w-md text-sm leading-relaxed text-bone/70">
               Carteira oficial de Blaster: treinamento técnico e habilitação
               legal para manuseio de pirotecnia com segurança total.
             </p>
@@ -117,7 +117,7 @@ export function About() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1, delay: 0.3 }}
-            className="mt-5 flex items-center justify-between text-[10px] font-semibold uppercase tracking-micro text-bone/40"
+            className="mt-5 flex items-center justify-between text-[10px] font-semibold uppercase tracking-micro text-bone/60"
           >
             <span>MaguilaFX — desde o primeiro clarão</span>
             <span className="text-maguilaGold">★ Nº1 no Tocantins</span>
