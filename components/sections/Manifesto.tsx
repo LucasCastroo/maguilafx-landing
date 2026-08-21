@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 
 const TEXT =
-  "Não montamos apenas efeitos. Coreografamos fogo, fumaça, faísca e luz no segundo exato — para o seu público sentir o espetáculo, não apenas assistir.";
+  "Não montamos apenas efeitos. Coreografamos fogo, fumaça, faísca e luz no segundo exato para o seu público sentir o espetáculo, não apenas assistir.";
 
 function Word({
   children,

@@ -109,6 +109,300 @@ body {
   @apply inline-flex items-center justify-center gap-3 border border-bone/25 px-8 py-4 text-xs font-bold uppercase tracking-micro text-bone/90 transition-all duration-300 hover:border-bone hover:bg-bone hover:text-ink;
 }
 
+/* CTA da Hero: ignição abstrata na paleta da marca, sem fogo literal. */
+.hero-impact-button {
+  position: relative;
+  isolation: isolate;
+  border-radius: 0;
+  color: #070708;
+  transform: translateZ(0);
+  transition:
+    color 380ms ease,
+    transform 460ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 460ms ease;
+}
+
+.hero-impact-button__surface {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border: 1px solid rgba(244, 241, 234, 0.76);
+  border-radius: inherit;
+  background: #f4f1ea;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76);
+  transition:
+    border-color 440ms ease,
+    box-shadow 460ms ease;
+}
+
+.hero-impact-button__surface::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(110deg, #161619 0%, #070708 54%, #0d0d0f 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 42, 42, 0.18);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 640ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-impact-button__surface::after {
+  content: "";
+  position: absolute;
+  top: -85%;
+  bottom: -85%;
+  left: -26%;
+  width: 18%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(244, 241, 234, 0.74),
+    transparent
+  );
+  mix-blend-mode: screen;
+  opacity: 0;
+  transform: translateX(-220%) skewX(-18deg);
+}
+
+.hero-impact-button__label {
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  text-shadow: 0 1px 12px transparent;
+  transition: text-shadow 380ms ease;
+}
+
+.hero-impact-button__arrow {
+  display: inline-block;
+  font-size: 1.05em;
+  line-height: 1;
+  transition: transform 460ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Halo, onda de pressão e feixe horizontal formam um único clarão curto. */
+.hero-impact-button__combustion {
+  position: absolute;
+  inset: -1.55rem -2.65rem;
+  z-index: -2;
+  border-radius: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 42, 42, 0.62) 0%,
+    rgba(183, 13, 22, 0.32) 34%,
+    rgba(255, 42, 42, 0.08) 54%,
+    transparent 72%
+  );
+  filter: blur(11px);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.58, 0.34);
+  transition:
+    opacity 320ms ease,
+    transform 440ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.hero-impact-button__combustion::before {
+  content: "";
+  position: absolute;
+  inset: 32% 16%;
+  border: 1px solid rgba(255, 42, 42, 0.82);
+  border-radius: inherit;
+  opacity: 0;
+  transform: scale(0.62);
+}
+
+.hero-impact-button__combustion::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 2%;
+  left: 2%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 42, 42, 0.44) 18%,
+    rgba(244, 241, 234, 0.96) 50%,
+    rgba(255, 42, 42, 0.44) 82%,
+    transparent
+  );
+  box-shadow: 0 0 12px rgba(255, 42, 42, 0.82);
+  opacity: 0;
+  transform: scaleX(0.18);
+}
+
+/* Calor ascendente sugerido por massas de luz desfocadas, não por chamas. */
+.hero-impact-button__heat {
+  position: absolute;
+  right: 7%;
+  bottom: 44%;
+  left: 7%;
+  z-index: -1;
+  height: 3.3rem;
+  background:
+    radial-gradient(ellipse at 12% 100%, rgba(255, 42, 42, 0.52), transparent 58%),
+    radial-gradient(ellipse at 38% 100%, rgba(183, 13, 22, 0.5), transparent 62%),
+    radial-gradient(ellipse at 64% 100%, rgba(255, 42, 42, 0.46), transparent 60%),
+    radial-gradient(ellipse at 88% 100%, rgba(183, 13, 22, 0.48), transparent 56%);
+  filter: blur(8px);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(1rem) scale(0.76, 0.42);
+  transform-origin: center bottom;
+  transition:
+    opacity 300ms ease,
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.hero-impact-button:hover,
+.hero-impact-button:focus-visible {
+  color: #f4f1ea;
+  filter: drop-shadow(0 12px 22px rgba(183, 13, 22, 0.28));
+  transform: translateY(-2px);
+}
+
+.hero-impact-button:hover .hero-impact-button__surface,
+.hero-impact-button:focus-visible .hero-impact-button__surface {
+  border-color: rgba(255, 42, 42, 0.76);
+  box-shadow:
+    0 13px 34px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(255, 42, 42, 0.12),
+    inset 0 1px 0 rgba(244, 241, 234, 0.12);
+}
+
+.hero-impact-button:hover .hero-impact-button__surface::before,
+.hero-impact-button:focus-visible .hero-impact-button__surface::before {
+  transform: scaleX(1);
+}
+
+.hero-impact-button:hover .hero-impact-button__surface::after,
+.hero-impact-button:focus-visible .hero-impact-button__surface::after {
+  animation: hero-impact-reflection 780ms cubic-bezier(0.22, 1, 0.36, 1) 100ms 1;
+}
+
+.hero-impact-button:hover .hero-impact-button__label,
+.hero-impact-button:focus-visible .hero-impact-button__label {
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.42);
+}
+
+.hero-impact-button:hover .hero-impact-button__arrow,
+.hero-impact-button:focus-visible .hero-impact-button__arrow {
+  transform: translateX(3px);
+}
+
+.hero-impact-button:hover .hero-impact-button__combustion,
+.hero-impact-button:focus-visible .hero-impact-button__combustion {
+  animation: hero-impact-ignition 900ms cubic-bezier(0.16, 1, 0.3, 1) 1 forwards;
+}
+
+.hero-impact-button:hover .hero-impact-button__combustion::before,
+.hero-impact-button:focus-visible .hero-impact-button__combustion::before {
+  animation: hero-impact-shockwave 800ms cubic-bezier(0.16, 1, 0.3, 1) 60ms 1;
+}
+
+.hero-impact-button:hover .hero-impact-button__combustion::after,
+.hero-impact-button:focus-visible .hero-impact-button__combustion::after {
+  animation: hero-impact-flare 680ms cubic-bezier(0.16, 1, 0.3, 1) 1;
+}
+
+.hero-impact-button:hover .hero-impact-button__heat,
+.hero-impact-button:focus-visible .hero-impact-button__heat {
+  animation: hero-impact-heat 980ms cubic-bezier(0.16, 1, 0.3, 1) 70ms 1 forwards;
+}
+
+.hero-impact-button:active {
+  transform: translateY(0) scale(0.985);
+}
+
+@keyframes hero-impact-ignition {
+  0% {
+    opacity: 0;
+    transform: scale(0.58, 0.34);
+  }
+  22% {
+    opacity: 0.94;
+  }
+  52% {
+    opacity: 0.68;
+    transform: scale(1.08, 0.94);
+  }
+  100% {
+    opacity: 0.38;
+    transform: scale(0.98, 0.78);
+  }
+}
+
+@keyframes hero-impact-shockwave {
+  0% {
+    opacity: 0;
+    transform: scale(0.62);
+  }
+  18% {
+    opacity: 0.82;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.4, 2.15);
+  }
+}
+
+@keyframes hero-impact-flare {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.18);
+  }
+  24% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(1.12);
+  }
+}
+
+@keyframes hero-impact-heat {
+  0% {
+    opacity: 0;
+    transform: translateY(1rem) scale(0.76, 0.42);
+  }
+  36% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0.24;
+    transform: translateY(-0.55rem) scale(1.08, 1.06);
+  }
+}
+
+@keyframes hero-impact-reflection {
+  0% {
+    opacity: 0;
+    transform: translateX(-220%) skewX(-18deg);
+  }
+  24% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(760%) skewX(-18deg);
+  }
+}
+
+@media (max-width: 639px) {
+  .hero-impact-button__combustion {
+    right: -0.75rem;
+    left: -0.75rem;
+  }
+}
+
 /* Inputs minimalistas (sem card) */
 .field-label {
   @apply mb-2 block text-[10px] font-semibold uppercase tracking-micro text-bone/60;
@@ -156,6 +450,36 @@ textarea.field-input {
   100% { transform: translate(2%, 2%); }
 }
 
+/* Reflexo rápido da faixa de anúncio, disparado apenas por interação. */
+.announcement-shine {
+  transform: translateX(-160%) skewX(-12deg);
+}
+
+.announcement-shine--ambient {
+  animation: announcement-shine-cycle 5.65s linear 2.2s infinite;
+}
+
+.announcement-strip:hover .announcement-shine--hover,
+.announcement-strip:focus-visible .announcement-shine--hover {
+  animation: announcement-shine 1.05s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@keyframes announcement-shine {
+  from { transform: translateX(-160%) skewX(-12deg); }
+  to { transform: translateX(430%) skewX(-12deg); }
+}
+
+@keyframes announcement-shine-cycle {
+  0% {
+    transform: translateX(-160%) skewX(-12deg);
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  20.35%,
+  100% {
+    transform: translateX(430%) skewX(-12deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .grain::after {
     animation: none;
@@ -167,6 +491,36 @@ textarea.field-input {
   .animate-scroll-cue,
   .animate-pulse-soft {
     animation: none !important;
+  }
+
+  .announcement-shine--ambient,
+  .announcement-strip:hover .announcement-shine--hover,
+  .announcement-strip:focus-visible .announcement-shine--hover {
+    animation: none;
+  }
+
+  .hero-impact-button,
+  .hero-impact-button__surface,
+  .hero-impact-button__surface::before,
+  .hero-impact-button__label,
+  .hero-impact-button__arrow {
+    transition: none;
+  }
+
+  .hero-impact-button:hover,
+  .hero-impact-button:focus-visible {
+    filter: none;
+    transform: none;
+  }
+
+  .hero-impact-button__combustion,
+  .hero-impact-button__heat {
+    display: none;
+  }
+
+  .hero-impact-button:hover .hero-impact-button__surface::after,
+  .hero-impact-button:focus-visible .hero-impact-button__surface::after {
+    animation: none;
   }
 
   html {
