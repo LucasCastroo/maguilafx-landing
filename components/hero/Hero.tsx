@@ -29,7 +29,11 @@ export function Hero() {
     const video = videoRef.current;
     if (!video) return;
 
+    let cancelled = false;
+
     const syncPlayback = () => {
+      if (cancelled) return;
+
       const shouldPlay =
         introDone &&
         isHeroInView &&
@@ -42,24 +46,49 @@ export function Hero() {
         return;
       }
 
+      if (!video.paused) return;
+
       void video
         .play()
-        .then(() => setAutoplayBlocked(false))
+        .then(() => {
+          if (!cancelled) setAutoplayBlocked(false);
+        })
         .catch((error: unknown) => {
+          if (cancelled) return;
+          const name = (error as DOMException)?.name;
+
           // iOS em Modo de Baixo Consumo recusa autoplay mesmo mudo e inline.
           // Nesse caso o play só sai de um gesto — então revelamos o botão.
-          if ((error as DOMException)?.name === "NotAllowedError") {
-            setAutoplayBlocked(true);
-          }
+          if (name === "NotAllowedError") setAutoplayBlocked(true);
+
+          // AbortError significa que um pause() cortou este play() no meio, ou
+          // que ainda não havia dado suficiente. Não é bloqueio: os eventos de
+          // mídia abaixo chamam esta função de novo quando der.
         });
     };
 
     syncPlayback();
+
+    // Sem estes ouvintes, um play() que falhasse por falta de buffer só seria
+    // retentado na próxima mudança de dependência — que pode nunca vir. Eram
+    // as falhas intermitentes de carregamento do vídeo da hero.
+    video.addEventListener("loadeddata", syncPlayback);
+    video.addEventListener("canplay", syncPlayback);
+    video.addEventListener("stalled", syncPlayback);
+    video.addEventListener("suspend", syncPlayback);
     document.addEventListener("visibilitychange", syncPlayback);
 
     return () => {
+      cancelled = true;
+      video.removeEventListener("loadeddata", syncPlayback);
+      video.removeEventListener("canplay", syncPlayback);
+      video.removeEventListener("stalled", syncPlayback);
+      video.removeEventListener("suspend", syncPlayback);
       document.removeEventListener("visibilitychange", syncPlayback);
-      video.pause();
+      // Sem pause() aqui de propósito: o cleanup roda a cada mudança de
+      // dependência, e pausar em cima de um play() pendente era justamente o
+      // que gerava o AbortError. Ao desmontar, o elemento sai do DOM e para
+      // sozinho; enquanto montado, quem decide pausar é o syncPlayback.
     };
   }, [introDone, isHeroInView, pausedByUser, prefersReduced, showVideo]);
 
@@ -98,7 +127,10 @@ export function Hero() {
           muted
           loop
           playsInline
-          preload="metadata"
+          // No desktop o vídeo é a peça central acima da dobra: vale bufferizar
+          // adiantado para não haver espera. No celular fica em `metadata` para
+          // não gastar dado de quem talvez nem role a página.
+          preload={device.compact ? "metadata" : "auto"}
           aria-hidden="true"
           tabIndex={-1}
           disablePictureInPicture
