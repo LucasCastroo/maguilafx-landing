@@ -29,8 +29,25 @@ const differentials = [
   "Foco absoluto em segurança e impacto visual",
 ];
 
+/**
+ * Véu do modo scrub: o texto sobe da base do quadro, então o escurecimento é
+ * pesado embaixo e some no topo, deixando a imagem respirar.
+ */
 const SCRIM =
   "absolute inset-0 bg-[linear-gradient(to_top,rgba(7,7,8,0.94)_0%,rgba(7,7,8,0.66)_28%,rgba(7,7,8,0.2)_58%,transparent_82%)]";
+
+/**
+ * Véu do modo em loop.
+ *
+ * Aqui o conteúdo ocupa a altura inteira da seção — kicker e título no topo,
+ * lista de diferenciais embaixo — então o gradiente do scrub não serve: os
+ * 18% de cima dele são transparentes e deixariam o título sobre chama pura.
+ *
+ * Este cobre tudo, com as pontas mais fechadas (onde estão título e lista) e
+ * um respiro no meio, que é onde o vídeo aparece entre os blocos de texto.
+ */
+const LOOP_SCRIM =
+  "absolute inset-0 bg-[linear-gradient(to_top,rgba(7,7,8,0.93)_0%,rgba(7,7,8,0.86)_20%,rgba(7,7,8,0.74)_48%,rgba(7,7,8,0.82)_74%,rgba(7,7,8,0.9)_100%)]";
 
 function AboutContent() {
   return (
@@ -199,7 +216,7 @@ function AboutLoop({ allowVideo }: { allowVideo: boolean }) {
         </video>
       )}
 
-      <div aria-hidden className={`${SCRIM} -z-10`} />
+      <div aria-hidden className={`${LOOP_SCRIM} -z-10`} />
 
       <div className="page-container relative py-24 md:py-36">
         <AboutContent />
