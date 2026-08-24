@@ -8,7 +8,13 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    if (prefersReduced) return;
+
+    // Em toque o scroll nativo já é suave e, no iOS, roda fora da main thread.
+    // Sobrepor a ele um rAF permanente só acrescenta latência e disputa de
+    // frame — era uma das causas do travamento no celular.
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+
+    if (prefersReduced || coarsePointer) return;
 
     const lenis = new Lenis({
       duration: 1.1,

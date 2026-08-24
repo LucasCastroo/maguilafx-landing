@@ -4,25 +4,30 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useIntro } from "@/components/IntroProvider";
+import { useDeviceProfile } from "@/lib/useDeviceProfile";
+import { heroSources } from "@/lib/videoSources";
 
-const HERO_VIDEO_SRC = "/videos/hero-web.mp4";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [videoReady, setVideoReady] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   const [pausedByUser, setPausedByUser] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
   const { introDone } = useIntro();
   const prefersReduced = useReducedMotion();
   const isHeroInView = useInView(ref, { amount: 0.2 });
+  const device = useDeviceProfile();
+
+  // Em rede lenta ou com economia de dados a imagem de fundo já conta a
+  // história — não vale gastar megabytes do usuário para reforçá-la.
+  const showVideo = !prefersReduced && device.resolved && !device.frugal;
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-
-    const markVideoAsReady = () => setVideoReady(true);
 
     const syncPlayback = () => {
       const shouldPlay =
@@ -32,31 +37,31 @@ export function Hero() {
         !pausedByUser &&
         document.visibilityState === "visible";
 
-      if (shouldPlay) {
-        void video.play().catch(() => {
-          // A imagem permanece visível se o navegador bloquear autoplay.
-        });
-      } else {
+      if (!shouldPlay) {
         video.pause();
+        return;
       }
+
+      void video
+        .play()
+        .then(() => setAutoplayBlocked(false))
+        .catch((error: unknown) => {
+          // iOS em Modo de Baixo Consumo recusa autoplay mesmo mudo e inline.
+          // Nesse caso o play só sai de um gesto — então revelamos o botão.
+          if ((error as DOMException)?.name === "NotAllowedError") {
+            setAutoplayBlocked(true);
+          }
+        });
     };
 
-    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-      markVideoAsReady();
-    }
-
-    video.addEventListener("loadeddata", markVideoAsReady);
-    video.addEventListener("canplay", markVideoAsReady);
     syncPlayback();
     document.addEventListener("visibilitychange", syncPlayback);
 
     return () => {
-      video.removeEventListener("loadeddata", markVideoAsReady);
-      video.removeEventListener("canplay", markVideoAsReady);
       document.removeEventListener("visibilitychange", syncPlayback);
       video.pause();
     };
-  }, [introDone, isHeroInView, pausedByUser, prefersReduced]);
+  }, [introDone, isHeroInView, pausedByUser, prefersReduced, showVideo]);
 
   const togglePlayback = () => {
     const video = videoRef.current;
@@ -64,6 +69,7 @@ export function Hero() {
 
     if (video.paused) {
       setPausedByUser(false);
+      setAutoplayBlocked(false);
       void video.play().catch(() => undefined);
     } else {
       setPausedByUser(true);
@@ -86,10 +92,9 @@ export function Hero() {
         sizes="100vw"
       />
 
-      {!prefersReduced && (
+      {showVideo && (
         <video
           ref={videoRef}
-          src={HERO_VIDEO_SRC}
           muted
           loop
           playsInline
@@ -98,14 +103,22 @@ export function Hero() {
           tabIndex={-1}
           disablePictureInPicture
           disableRemotePlayback
-          onLoadedData={() => setVideoReady(true)}
-          onError={() => setVideoReady(false)}
-          onPlay={() => setIsPlaying(true)}
+          onPlaying={() => {
+            setHasStarted(true);
+            setIsPlaying(true);
+          }}
           onPause={() => setIsPlaying(false)}
+          // O fade espera a reprodução começar de verdade, não só o arquivo
+          // carregar: se o autoplay for barrado, fica a arte de fundo em vez
+          // de um quadro congelado.
           className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
-            videoReady ? "opacity-100" : "opacity-0"
+            hasStarted ? "opacity-100" : "opacity-0"
           }`}
-        />
+        >
+          {heroSources(device.compact).map((source) => (
+            <source key={source.src} src={source.src} type={source.type} />
+          ))}
+        </video>
       )}
 
       {/* Contraste concentrado somente na área da chamada. */}
@@ -146,7 +159,7 @@ export function Hero() {
         </div>
       </motion.div>
 
-      {!prefersReduced && videoReady && (
+      {showVideo && (hasStarted || autoplayBlocked) && (
         <button
           type="button"
           onClick={togglePlayback}

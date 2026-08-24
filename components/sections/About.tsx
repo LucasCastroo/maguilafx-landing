@@ -11,10 +11,15 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
+import { useDeviceProfile } from "@/lib/useDeviceProfile";
+import {
+  ABOUT_POSTER,
+  ABOUT_SCRUB_SRC,
+  aboutLoopSources,
+} from "@/lib/videoSources";
 
-const ABOUT_VIDEO_SRC = "/videos/about.mp4";
-const FRAME_DURATION = 1 / 60;
-const SCRUB_STEP = 1 / 24;
+const FRAME_DURATION = 1 / 30;
+const SCRUB_STEP = 1 / 30;
 const RATE_CHANGE_THRESHOLD = 0.025;
 
 const differentials = [
@@ -23,6 +28,9 @@ const differentials = [
   "Planejamento integrado com a produção",
   "Foco absoluto em segurança e impacto visual",
 ];
+
+const SCRIM =
+  "absolute inset-0 bg-[linear-gradient(to_top,rgba(7,7,8,0.94)_0%,rgba(7,7,8,0.66)_28%,rgba(7,7,8,0.2)_58%,transparent_82%)]";
 
 function AboutContent() {
   return (
@@ -88,7 +96,126 @@ function AboutContent() {
   );
 }
 
-export function About() {
+/**
+ * Foto de fundo, altura natural da seção, nenhum scroll extra.
+ *
+ * É o que o celular recebe: sem vídeo, sem sticky, sem `scale` animado — nada
+ * que force o compositor durante a rolagem. Também serve a quem pediu menos
+ * movimento.
+ */
+function AboutStatic({ image, priority }: { image: string; priority?: boolean }) {
+  return (
+    <section id="sobre" className="relative isolate overflow-hidden bg-ink">
+      <Image
+        src={image}
+        alt=""
+        fill
+        priority={priority}
+        className="-z-20 object-cover"
+        sizes="100vw"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(7,7,8,0.97)_0%,rgba(7,7,8,0.78)_42%,rgba(7,7,8,0.48)_100%)]"
+      />
+      <div className="page-container relative py-24 md:py-36">
+        <AboutContent />
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Celular e tablet: o vídeo roda em loop simples como pano de fundo, na altura
+ * natural da seção. Sem sticky de 260svh, sem scrub, sem `scale` animado —
+ * nada que force o compositor durante o scroll. Só entra em cena quando a
+ * seção se aproxima e pausa assim que sai, para não gastar bateria à toa.
+ */
+function AboutLoop({ allowVideo }: { allowVideo: boolean }) {
+  const ref = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [hasStarted, setHasStarted] = useState(false);
+
+  const nearViewport = useInView(ref, { once: true, margin: "600px 0px" });
+  const inViewport = useInView(ref, { amount: 0.15 });
+  const shouldLoad = allowVideo && nearViewport;
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const syncPlayback = () => {
+      if (inViewport && document.visibilityState === "visible") {
+        // Autoplay barrado (Modo de Baixo Consumo) apenas mantém o poster —
+        // não há botão a oferecer num fundo puramente decorativo.
+        void video.play().catch(() => undefined);
+      } else {
+        video.pause();
+      }
+    };
+
+    syncPlayback();
+    document.addEventListener("visibilitychange", syncPlayback);
+
+    return () => {
+      document.removeEventListener("visibilitychange", syncPlayback);
+      video.pause();
+    };
+  }, [inViewport, shouldLoad]);
+
+  return (
+    <section
+      ref={ref}
+      id="sobre"
+      className="relative isolate overflow-hidden bg-ink"
+    >
+      <Image
+        src={ABOUT_POSTER}
+        alt=""
+        fill
+        className="-z-20 object-cover"
+        sizes="100vw"
+      />
+
+      {shouldLoad && (
+        <video
+          ref={videoRef}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          tabIndex={-1}
+          disablePictureInPicture
+          disableRemotePlayback
+          onPlaying={() => setHasStarted(true)}
+          className={`pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover transition-opacity duration-700 ${
+            hasStarted ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {aboutLoopSources.map((source) => (
+            <source key={source.src} src={source.src} type={source.type} />
+          ))}
+        </video>
+      )}
+
+      <div aria-hidden className={`${SCRIM} -z-10`} />
+
+      <div className="page-container relative py-24 md:py-36">
+        <AboutContent />
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Desktop com ponteiro preciso: o vídeo acompanha o scroll da seção.
+ *
+ * Ao avançar, persegue o progresso com playback sequencial em vez de seeks —
+ * mesmo com GOP curto, tocar sai mais barato que buscar. Ao voltar, os seeks
+ * ficam serializados e o último alvo vence.
+ */
+function AboutScrub() {
   const ref = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoDurationRef = useRef(0);
@@ -97,22 +224,14 @@ export function About() {
   const seekInFlightRef = useRef(false);
   const playRequestRef = useRef(false);
   const [videoReady, setVideoReady] = useState(false);
-  const prefersReduced = useReducedMotion();
 
-  // O original tem cerca de 13 MB e o índice MP4 fica no fim do arquivo. Ele
-  // começa a carregar com antecedência para estar pronto antes do scrub.
-  const shouldLoadVideo = useInView(ref, {
-    once: true,
-    margin: "1500px 0px",
-  });
+  const shouldLoadVideo = useInView(ref, { once: true, margin: "1500px 0px" });
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
   });
 
-  // O spring absorve pequenas variações da roda/touchpad sem desconectar o
-  // vídeo da posição real da seção.
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 105,
     damping: 30,
@@ -120,8 +239,6 @@ export function About() {
     restDelta: 0.0005,
   });
 
-  // A subida principal acontece naturalmente com o conteúdo no fluxo da seção;
-  // estes valores só suavizam sua entrada na parte de baixo do quadro.
   const contentY = useTransform(smoothProgress, [0.24, 0.54], [80, 0]);
   const contentOpacity = useTransform(smoothProgress, [0.22, 0.48], [0, 1]);
   const videoScale = useTransform(smoothProgress, [0, 1], [1.045, 1]);
@@ -131,9 +248,6 @@ export function About() {
     [0.3, 0.62, 1]
   );
 
-  // Ao avançar, o vídeo persegue o progresso com playback sequencial, evitando
-  // a decodificação cara causada por seeks em um MP4 com poucos keyframes. Ao
-  // voltar a página, os seeks continuam serializados e o último alvo vence.
   const scheduleVideoSync = useCallback((progress: number) => {
     pendingProgressRef.current = progress;
     if (syncFrameRef.current !== null || seekInFlightRef.current) return;
@@ -154,10 +268,7 @@ export function About() {
       if (difference < -SCRUB_STEP) {
         const reverseTarget = Math.max(
           0,
-          Math.min(
-            safeEnd,
-            Math.round(targetTime / SCRUB_STEP) * SCRUB_STEP
-          )
+          Math.min(safeEnd, Math.round(targetTime / SCRUB_STEP) * SCRUB_STEP)
         );
 
         video.pause();
@@ -167,7 +278,6 @@ export function About() {
           video.currentTime = reverseTarget;
         } catch {
           seekInFlightRef.current = false;
-          // O poster permanece visível se o frame ainda não estiver disponível.
         }
         return;
       }
@@ -177,12 +287,7 @@ export function About() {
         : FRAME_DURATION / 2;
 
       if (difference > forwardThreshold) {
-        // Controle proporcional: acompanha scroll lento e acelera quando o
-        // usuário avança rapidamente, sem saltar pela timeline.
-        const nextPlaybackRate = Math.min(
-          4,
-          Math.max(0.12, difference * 8)
-        );
+        const nextPlaybackRate = Math.min(4, Math.max(0.12, difference * 8));
         if (
           Math.abs(video.playbackRate - nextPlaybackRate) >
           RATE_CHANGE_THRESHOLD
@@ -211,7 +316,7 @@ export function About() {
   }, []);
 
   useMotionValueEvent(smoothProgress, "change", (latest) => {
-    if (!prefersReduced) scheduleVideoSync(latest);
+    scheduleVideoSync(latest);
   });
 
   useEffect(() => {
@@ -265,41 +370,11 @@ export function About() {
     scheduleVideoSync(smoothProgress.get());
   };
 
-  if (prefersReduced) {
-    return (
-      <section
-        ref={ref}
-        id="sobre"
-        className="relative isolate overflow-hidden bg-ink"
-      >
-        <Image
-          src="/images/equipe/img-equipe-ofc.png"
-          alt=""
-          fill
-          className="-z-20 object-cover"
-          sizes="100vw"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10 bg-[linear-gradient(to_top,rgba(7,7,8,0.97)_0%,rgba(7,7,8,0.78)_42%,rgba(7,7,8,0.48)_100%)]"
-        />
-        <div className="page-container relative py-24 md:py-36">
-          <AboutContent />
-        </div>
-      </section>
-    );
-  }
-
   return (
-    <section
-      ref={ref}
-      id="sobre"
-      className="relative min-h-[240svh] bg-ink md:min-h-[260svh]"
-    >
+    <section ref={ref} id="sobre" className="relative min-h-[260svh] bg-ink">
       <div className="sticky top-0 h-[100svh] overflow-hidden bg-ink">
-        {/* Poster/fallback servido pelo next/image enquanto o vídeo carrega. */}
         <Image
-          src="/images/equipe/img-equipe-ofc.png"
+          src={ABOUT_POSTER}
           alt=""
           fill
           className="object-cover"
@@ -308,7 +383,7 @@ export function About() {
 
         <motion.video
           ref={videoRef}
-          src={shouldLoadVideo ? ABOUT_VIDEO_SRC : undefined}
+          src={shouldLoadVideo ? ABOUT_SCRUB_SRC : undefined}
           muted
           playsInline
           preload="auto"
@@ -320,17 +395,19 @@ export function About() {
           onLoadedData={() => setVideoReady(true)}
           onCanPlay={() => setVideoReady(true)}
           onError={() => setVideoReady(false)}
+          // `initial` explícito: o `animate` só assume no primeiro frame do
+          // framer-motion, e até lá o elemento ficaria opaco por cima do poster.
+          initial={{ opacity: 0 }}
           animate={{ opacity: videoReady ? 1 : 0 }}
           transition={{ duration: 0.65, ease: "easeOut" }}
           style={{ scale: videoScale }}
           className="pointer-events-none absolute inset-0 h-full w-full object-cover [will-change:transform]"
         />
 
-        {/* Sombra que cresce suavemente de baixo para cima junto com o texto. */}
         <motion.div
           aria-hidden
           style={{ opacity: scrimOpacity }}
-          className="absolute inset-0 bg-[linear-gradient(to_top,rgba(7,7,8,0.94)_0%,rgba(7,7,8,0.66)_28%,rgba(7,7,8,0.2)_58%,transparent_82%)]"
+          className={SCRIM}
         />
         <div
           aria-hidden
@@ -348,10 +425,10 @@ export function About() {
         </div>
       </div>
 
-      {/* O conteúdo permanece no fluxo para não ser cortado em celulares baixos.
+      {/* O conteúdo permanece no fluxo para não ser cortado em telas baixas.
           A margem negativa o coloca sobre a mídia sticky. */}
-      <div className="relative z-10 -mt-[100svh] min-h-[240svh] md:min-h-[260svh]">
-        <div className="page-container flex min-h-[240svh] items-end pb-[10svh] md:min-h-[260svh] md:pb-[12svh]">
+      <div className="relative z-10 -mt-[100svh] min-h-[260svh]">
+        <div className="page-container flex min-h-[260svh] items-end pb-[12svh]">
           <motion.div
             style={{ y: contentY, opacity: contentOpacity }}
             className="w-full [will-change:transform,opacity]"
@@ -362,4 +439,18 @@ export function About() {
       </div>
     </section>
   );
+}
+
+const TEAM_PHOTO_REDUCED = "/images/equipe/img-equipe-ofc.jpg";
+
+export function About() {
+  const prefersReduced = useReducedMotion();
+  const device = useDeviceProfile();
+
+  if (prefersReduced) return <AboutStatic image={TEAM_PHOTO_REDUCED} />;
+  if (device.resolved && device.canScrub) return <AboutScrub />;
+
+  // Antes de resolver o perfil renderiza a versão leve sem vídeo: é o mesmo
+  // HTML que o servidor produz, então não há divergência de hidratação.
+  return <AboutLoop allowVideo={device.resolved && !device.frugal} />;
 }

@@ -30,3 +30,6 @@ yarn-error.log*
 
 # typescript
 tsconfig.tsbuildinfo
+
+# masters de video (originais pesados, fora do deploy)
+/media-src/

@@ -11,6 +11,7 @@ import {
   useTransform,
   useVelocity,
 } from "framer-motion";
+import { useDeviceProfile } from "@/lib/useDeviceProfile";
 
 const items = [
   "Pirotecnia",
@@ -26,6 +27,9 @@ const wrap = (min: number, max: number, v: number) => {
   const range = max - min;
   return min + (((v - min) % range) + range) % range;
 };
+
+const TRACK = "flex w-max gap-6 pr-6 md:gap-10 md:pr-10";
+const GROUP = "flex shrink-0 items-center gap-6 md:gap-10";
 
 function Sequence() {
   return (
@@ -48,13 +52,42 @@ function Sequence() {
   );
 }
 
-/**
- * Marquee que reage à velocidade do scroll: acelera quando o usuário rola,
- * inverte a direção quando rola para cima e ganha uma leve inclinação.
- */
-export function Marquee() {
-  const prefersReduced = useReducedMotion();
+function Shell({ children }: { children: React.ReactNode }) {
+  return (
+    <section
+      aria-hidden
+      className="relative overflow-hidden border-y border-bone/10 bg-ink py-6 md:py-8"
+    >
+      {children}
+    </section>
+  );
+}
 
+/**
+ * Celular: animação puramente declarativa. Fica no compositor, não toca a main
+ * thread e não é afetada por scroll — o oposto da versão reativa, onde o
+ * `skewX` obrigava o navegador a rasterizar de novo um texto 7xl a cada frame.
+ */
+function MarqueeSimple() {
+  return (
+    <Shell>
+      <div className={`${TRACK} animate-marquee will-change-transform`}>
+        <div className={GROUP}>
+          <Sequence />
+        </div>
+        <div className={GROUP}>
+          <Sequence />
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+/**
+ * Desktop: reage à velocidade do scroll — acelera ao rolar, inverte a direção
+ * ao subir e ganha uma leve inclinação.
+ */
+function MarqueeReactive() {
   const baseX = useMotionValue(0);
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
@@ -71,8 +104,6 @@ export function Marquee() {
   const direction = useRef(-1);
 
   useAnimationFrame((_, delta) => {
-    if (prefersReduced) return;
-
     let moveBy = direction.current * 2 * (delta / 1000);
 
     const vf = velocityFactor.get();
@@ -84,21 +115,40 @@ export function Marquee() {
   });
 
   return (
-    <section
-      aria-hidden
-      className="relative overflow-hidden border-y border-bone/10 bg-ink py-6 md:py-8"
-    >
+    <Shell>
       <motion.div
         style={{ x, skewX }}
-        className="flex w-max gap-6 pr-6 will-change-transform md:gap-10 md:pr-10"
+        className={`${TRACK} will-change-transform`}
       >
-        <div className="flex shrink-0 items-center gap-6 md:gap-10">
+        <div className={GROUP}>
           <Sequence />
         </div>
-        <div className="flex shrink-0 items-center gap-6 md:gap-10">
+        <div className={GROUP}>
           <Sequence />
         </div>
       </motion.div>
-    </section>
+    </Shell>
   );
+}
+
+export function Marquee() {
+  const prefersReduced = useReducedMotion();
+  const device = useDeviceProfile();
+
+  if (prefersReduced) {
+    return (
+      <Shell>
+        <div className={TRACK}>
+          <div className={GROUP}>
+            <Sequence />
+          </div>
+        </div>
+      </Shell>
+    );
+  }
+
+  // Antes de resolver, a versão em CSS: é o mesmo HTML do servidor e já
+  // anima sozinha, então nada pisca na hidratação.
+  if (device.resolved && !device.compact) return <MarqueeReactive />;
+  return <MarqueeSimple />;
 }

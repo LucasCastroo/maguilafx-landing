@@ -433,7 +433,10 @@ textarea.field-input {
 .grain::after {
   content: "";
   position: fixed;
-  inset: -100%;
+  /* Folga suficiente para o translate de 3% nunca revelar a borda.
+     Antes eram -100% (9x a area da viewport), o que obrigava o
+     compositor a manter uma textura gigante viva durante o scroll. */
+  inset: -6%;
   z-index: 90;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -448,6 +451,14 @@ textarea.field-input {
   50% { transform: translate(3%, -2%); }
   75% { transform: translate(-3%, -3%); }
   100% { transform: translate(2%, 2%); }
+}
+
+/* O grão animado é um luxo de desktop: em telas pequenas ele sozinho
+   derrubava o scroll, e parado o efeito visual é praticamente o mesmo. */
+@media (max-width: 1023px) {
+  .grain::after {
+    animation: none;
+  }
 }
 
 /* Reflexo rápido da faixa de anúncio, disparado apenas por interação. */

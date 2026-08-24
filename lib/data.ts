@@ -15,7 +15,7 @@ export const effects: Effect[] = [
     description:
       "Pirotecnia indoor totalmente segura. Não queima, não gera fumaça e é perfeita para proximidade com o público. A escolha certa para casamentos, entradas triunfais e palcos onde a segurança é prioridade.",
     specs: ["Altura ajustável de 1m a 5m", "Uso indoor e outdoor", "Não queima a pele"],
-    image: "/images/equipamentos/equipamento-1-sparkular.png",
+    image: "/images/equipamentos/equipamento-1-sparkular.jpg",
   },
   {
     id: "flame",
@@ -42,7 +42,7 @@ export const effects: Effect[] = [
     description:
       "Bolhas de sabão recheadas com fumaça que liberam uma névoa mágica ao estourar. Um efeito lúdico, inovador e surpreendente para momentos especiais.",
     specs: ["Bolhas com fumaça", "Alto rendimento", "Efeito lúdico e fotogênico"],
-    image: "/images/equipamentos/equipamento-4-bubble.png",
+    image: "/images/equipamentos/equipamento-4-bubble.jpg",
   },
   {
     id: "stadium-shot",
@@ -51,7 +51,7 @@ export const effects: Effect[] = [
     description:
       "Disparos massivos de confete ou serpentina que cobrem a multidão em segundos. O grand finale perfeito para festivais e viradas de show.",
     specs: ["Alcance de até 20 metros", "Confete ou serpentina", "Acionamento elétrico imediato"],
-    image: "/images/equipamentos/equipamento-5-shot.png",
+    image: "/images/equipamentos/equipamento-5-shot.jpg",
   },
   {
     id: "laser",
@@ -90,7 +90,7 @@ export const portfolio: PortfolioItem[] = [
     description: "Estruturas completas de efeitos para grandes palcos do Brasil.",
   },
   {
-    src: "/images/casamentos/casamento-1.png",
+    src: "/images/casamentos/casamento-1.jpg",
     alt: "Cerimônia de casamento com faíscas frias",
     category: "Casamentos",
     title: "Cerimônias",
@@ -104,21 +104,21 @@ export const portfolio: PortfolioItem[] = [
     description: "Sincronia perfeita entre drops e chamas.",
   },
   {
-    src: "/images/shows/show-6.JPG",
+    src: "/images/shows/show-6.jpg",
     alt: "Show com painéis de LED e efeitos de fumaça",
     category: "Produções",
     title: "Grandes Produções",
     description: "Luz, vídeo e atmosfera integrados em profundidade de palco.",
   },
   {
-    src: "/images/shows/show-1.png",
+    src: "/images/shows/show-1.jpg",
     alt: "Show indoor com pirotecnia",
     category: "Indoor",
     title: "Corporativo & Indoor",
     description: "Efeitos seguros e controlados para ambientes fechados.",
   },
   {
-    src: "/images/shows/show-balsas.JPG",
+    src: "/images/shows/show-balsas.jpg",
     alt: "Efeitos especiais sobre balsas",
     category: "Especiais",
     title: "Projetos Especiais",

@@ -23,26 +23,35 @@ export function Preloader() {
 
     document.documentElement.style.overflow = "hidden";
     const start = performance.now();
-    let rafId: number;
+    let rafId = 0;
+
+    const finish = () => {
+      setProgress(100);
+      setDone(true);
+      // A hero começa a entrar junto com a subida da cortina.
+      finishIntro();
+      document.documentElement.style.overflow = "";
+    };
 
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / DURATION_MS);
       // easing para o contador acelerar no fim
       const eased = 1 - Math.pow(1 - t, 3);
       setProgress(Math.round(eased * 100));
-      if (t < 1) {
-        rafId = requestAnimationFrame(tick);
-      } else {
-        setDone(true);
-        // A hero começa a entrar junto com a subida da cortina.
-        finishIntro();
-        document.documentElement.style.overflow = "";
-      }
+      if (t < 1) rafId = requestAnimationFrame(tick);
     };
 
     rafId = requestAnimationFrame(tick);
+
+    // O rAF congela em aba de segundo plano, e antes disso significava cortina
+    // parada e — pior — `overflow: hidden` preso no documento, deixando a
+    // página inteira sem rolagem até a aba voltar ao foco. O rAF agora só anima
+    // o contador; quem garante o fim é o timer, que dispara mesmo oculto.
+    const timerId = window.setTimeout(finish, DURATION_MS);
+
     return () => {
       cancelAnimationFrame(rafId);
+      window.clearTimeout(timerId);
       document.documentElement.style.overflow = "";
     };
   }, [finishIntro, prefersReduced]);
