@@ -70,11 +70,13 @@ export function Preloader() {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="relative h-20 w-20 md:h-24 md:w-24"
           >
+            {/* Sem `priority`: este logo vive atrás de uma cortina que sobe em
+                1,2 s, mas o preload dele disputava banda com a imagem do hero
+                — que é o elemento de LCP da página. */}
             <Image
               src="/images/logos/logo-mini-light.png"
               alt="MaguilaFX"
               fill
-              priority
               className="object-contain"
               sizes="96px"
             />

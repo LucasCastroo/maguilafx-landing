@@ -8,15 +8,19 @@ import { IntroProvider } from "@/components/IntroProvider";
 import { EmberCursor } from "@/components/EmberCursor";
 import { SITE_URL, WHATSAPP_URL, INSTAGRAM_URL } from "@/lib/data";
 
+// Só `latin`: o português cabe inteiro no Latin-1 Supplement (á ã ç é ô ú...).
+// O `latin-ext` cobre alfabetos do leste europeu e turco, que este site não
+// usa — e cada subset vira um preload de fonte competindo com a imagem do
+// hero, que é o elemento de LCP. Eram 4 preloads de fonte; agora são 2.
 const anton = Anton({
   weight: "400",
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
 });
 
 const archivo = Archivo({
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
 });

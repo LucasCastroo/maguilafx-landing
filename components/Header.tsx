@@ -175,12 +175,14 @@ export function Header() {
               aria-label="MaguilaFX — início"
             >
               <div className="relative h-9 w-9 md:h-10 md:w-10">
+                {/* Sem `priority`: são 40px de logo. Está na viewport, então
+                    carrega de imediato de qualquer forma — mas o preload
+                    passava à frente da imagem do hero na fila. */}
                 <Image
                   src="/images/logos/logo-mini-light.png"
                   alt=""
                   fill
                   className="object-contain"
-                  priority
                   sizes="40px"
                 />
               </div>
